@@ -1,4 +1,4 @@
-package me.mocadev.document.musicsheet;
+package me.mocadev.herokujavaapi.document.musicsheet;
 
 import lombok.Data;
 

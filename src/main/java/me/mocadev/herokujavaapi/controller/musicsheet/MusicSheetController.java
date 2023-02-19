@@ -1,6 +1,9 @@
-package me.mocadev.controller.musicsheet;
+package me.mocadev.herokujavaapi.controller.musicsheet;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import me.mocadev.herokujavaapi.dto.musicsheet.response.MusicResponseDto;
+import me.mocadev.herokujavaapi.service.musicsheet.MusicService;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,9 +25,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MusicSheetController {
 
-	@GetMapping
-	public void findAll() {
+	private final MusicService musicService;
 
+	@GetMapping
+	public List<MusicResponseDto> findAll() {
+		return musicService.findAll();
 	}
 
 	@PostMapping
@@ -34,7 +39,6 @@ public class MusicSheetController {
 
 	@DeleteMapping("/{id}")
 	public void deleteMusicSheet(@PathVariable String id) {
-
 	}
 
 	@PostMapping("/entrance")

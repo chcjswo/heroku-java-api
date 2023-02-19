@@ -1,4 +1,4 @@
-package me.mocadev.document.musicsheet;
+package me.mocadev.herokujavaapi.document.musicsheet;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -22,7 +22,8 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class Music {
 
 	@Id
-	private String _id;
+	@Field("_id")
+	private String id;
 	@Field("room_name")
 	private String roomName;
 	@Field("room_pass")
