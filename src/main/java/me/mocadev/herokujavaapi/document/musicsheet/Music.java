@@ -1,6 +1,6 @@
 package me.mocadev.herokujavaapi.document.musicsheet;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
 import lombok.Data;
@@ -38,7 +38,7 @@ public class Music {
 	@Field("random_string")
 	private String randomString;
 	@Field("reg_date")
-	private LocalDate regDate;
+	private LocalDateTime regDate;
 
 	@Builder
 	public Music(String roomName, String roomPass, List<MusicSheet> musicSheets, String videoUrl,
@@ -49,6 +49,6 @@ public class Music {
 		this.videoUrl = videoUrl;
 		this.memo = memo;
 		this.randomString = randomString;
-		this.regDate = LocalDate.now();
+		this.regDate = LocalDateTime.now().plusHours(9);
 	}
 }
