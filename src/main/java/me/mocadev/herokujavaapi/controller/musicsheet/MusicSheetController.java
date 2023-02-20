@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicSheetSaveRequestDto;
 import me.mocadev.herokujavaapi.dto.musicsheet.response.MusicResponseDto;
+import me.mocadev.herokujavaapi.dto.musicsheet.response.MusicSaveResponseDto;
 import me.mocadev.herokujavaapi.service.musicsheet.MusicService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,10 +40,10 @@ public class MusicSheetController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Void> saveMusicSheet(@RequestBody @Valid MusicSheetSaveRequestDto musicSheetSaveRequestDto,
+	public ResponseEntity<MusicSaveResponseDto> saveMusicSheet(@RequestBody @Valid MusicSheetSaveRequestDto musicSheetSaveRequestDto,
 							   Errors errors) {
-		musicService.saveMusicSheet(musicSheetSaveRequestDto);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+		final MusicSaveResponseDto savedMusic = musicService.saveMusicSheet(musicSheetSaveRequestDto);
+		return ResponseEntity.status(HttpStatus.CREATED).body(savedMusic);
 	}
 
 	@DeleteMapping("/{id}")
