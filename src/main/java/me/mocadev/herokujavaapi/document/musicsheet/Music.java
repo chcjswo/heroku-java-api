@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -25,6 +26,7 @@ public class Music {
 	@Field("_id")
 	private String id;
 	@Field("room_name")
+	@Indexed(unique = true)
 	private String roomName;
 	@Field("room_pass")
 	private String roomPass;
