@@ -13,4 +13,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 public interface MusicRepository extends MongoRepository<Music, String> {
 
 	Music findByRoomNameAndRoomPass(String roomName, String roomPass);
+
+	Music findByRandomString(String randomString);
 }

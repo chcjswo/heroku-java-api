@@ -4,6 +4,7 @@ import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicSheetLoginDto;
+import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicSheetRandomStringLoginDto;
 import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicSheetSaveRequestDto;
 import me.mocadev.herokujavaapi.dto.musicsheet.response.MusicResponseDto;
 import me.mocadev.herokujavaapi.dto.musicsheet.response.MusicSaveResponseDto;
@@ -55,13 +56,15 @@ public class MusicSheetController {
 	}
 
 	@PostMapping("/entrance")
-	public ResponseEntity<Void> entrance(@RequestBody @Valid MusicSheetLoginDto musicSheetLoginDto) {
-		musicService.entrance(musicSheetLoginDto);
+	public ResponseEntity<Void> entranceByNameAndPass(@RequestBody @Valid MusicSheetLoginDto musicSheetLoginDto) {
+		musicService.entranceByNameAndPass(musicSheetLoginDto);
 		return ResponseEntity.ok().build();
 	}
 
 	@PostMapping("/entrance/random")
-	public void entranceRandom() {
+	public ResponseEntity<Void> entranceByRandomString(@RequestBody @Valid MusicSheetRandomStringLoginDto musicSheetRandomStringLoginDto) {
+		musicService.entranceByRandomString(musicSheetRandomStringLoginDto);
+		return ResponseEntity.ok().build();
 
 	}
 }
