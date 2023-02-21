@@ -1,11 +1,13 @@
 package me.mocadev.herokujavaapi.service.musicsheet;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.mocadev.herokujavaapi.common.util.CommonUtils;
 import me.mocadev.herokujavaapi.document.musicsheet.Music;
+import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicSheetLoginDto;
 import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicSheetSaveRequestDto;
 import me.mocadev.herokujavaapi.dto.musicsheet.response.MusicResponseDto;
 import me.mocadev.herokujavaapi.dto.musicsheet.response.MusicSaveResponseDto;
@@ -46,5 +48,12 @@ public class MusicService {
 
 	public void deleteMusicSheet(String id) {
 		musicRepository.deleteById(id);
+	}
+
+	public void entrance(MusicSheetLoginDto musicSheetLoginDto) {
+		final Music result = musicRepository.findByRoomNameAndRoomPass(musicSheetLoginDto.getRoomName(), musicSheetLoginDto.getRoomPass());
+		if (Objects.isNull(result)) {
+			throw new RuntimeException("login fail, data not match");
+		}
 	}
 }

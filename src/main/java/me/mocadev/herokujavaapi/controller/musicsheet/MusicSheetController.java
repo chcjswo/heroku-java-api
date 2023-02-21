@@ -3,6 +3,7 @@ package me.mocadev.herokujavaapi.controller.musicsheet;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicSheetLoginDto;
 import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicSheetSaveRequestDto;
 import me.mocadev.herokujavaapi.dto.musicsheet.response.MusicResponseDto;
 import me.mocadev.herokujavaapi.dto.musicsheet.response.MusicSaveResponseDto;
@@ -40,9 +41,8 @@ public class MusicSheetController {
 	}
 
 	@PostMapping
-	public ResponseEntity<MusicSaveResponseDto> saveMusicSheet(
-		@RequestBody @Valid MusicSheetSaveRequestDto musicSheetSaveRequestDto,
-		Errors errors) {
+	public ResponseEntity<MusicSaveResponseDto> saveMusicSheet(@RequestBody @Valid MusicSheetSaveRequestDto musicSheetSaveRequestDto,
+															   Errors errors) {
 		final MusicSaveResponseDto savedMusic = musicService.saveMusicSheet(
 			musicSheetSaveRequestDto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(savedMusic);
@@ -55,8 +55,9 @@ public class MusicSheetController {
 	}
 
 	@PostMapping("/entrance")
-	public void entrance() {
-
+	public ResponseEntity<Void> entrance(@RequestBody @Valid MusicSheetLoginDto musicSheetLoginDto) {
+		musicService.entrance(musicSheetLoginDto);
+		return ResponseEntity.ok().build();
 	}
 
 	@PostMapping("/entrance/random")
