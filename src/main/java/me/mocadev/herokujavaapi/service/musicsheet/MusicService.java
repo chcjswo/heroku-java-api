@@ -43,4 +43,8 @@ public class MusicService {
 			musicSheetSaveRequestDto.toEntity(CommonUtils.getUUID().split("-")[0]));
 		return modelMapper.map(music, MusicSaveResponseDto.class);
 	}
+
+	public void deleteMusicSheet(String id) {
+		musicRepository.deleteById(id);
+	}
 }

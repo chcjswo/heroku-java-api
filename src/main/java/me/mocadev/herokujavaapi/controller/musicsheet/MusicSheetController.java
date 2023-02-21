@@ -40,14 +40,18 @@ public class MusicSheetController {
 	}
 
 	@PostMapping
-	public ResponseEntity<MusicSaveResponseDto> saveMusicSheet(@RequestBody @Valid MusicSheetSaveRequestDto musicSheetSaveRequestDto,
-							   Errors errors) {
-		final MusicSaveResponseDto savedMusic = musicService.saveMusicSheet(musicSheetSaveRequestDto);
+	public ResponseEntity<MusicSaveResponseDto> saveMusicSheet(
+		@RequestBody @Valid MusicSheetSaveRequestDto musicSheetSaveRequestDto,
+		Errors errors) {
+		final MusicSaveResponseDto savedMusic = musicService.saveMusicSheet(
+			musicSheetSaveRequestDto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(savedMusic);
 	}
 
 	@DeleteMapping("/{id}")
-	public void deleteMusicSheet(@PathVariable String id) {
+	public ResponseEntity<Void> deleteMusicSheet(@PathVariable String id) {
+		musicService.deleteMusicSheet(id);
+		return ResponseEntity.ok().build();
 	}
 
 	@PostMapping("/entrance")
