@@ -1,6 +1,6 @@
-package me.mocadev.repository.musicsheet;
+package me.mocadev.herokujavaapi.repository.musicsheet;
 
-import me.mocadev.document.musicsheet.Music;
+import me.mocadev.herokujavaapi.document.musicsheet.Music;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**
@@ -12,4 +12,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  **/
 public interface MusicRepository extends MongoRepository<Music, String> {
 
+	Music findByRoomNameAndRoomPass(String roomName, String roomPass);
+
+	Music findByRandomString(String randomString);
 }
