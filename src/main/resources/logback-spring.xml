@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+	<springProperty scope="context" name="LOG_PATH" source="logging.file.path"/>
+
+	<appender name="LOCAL_CONSOLE_POLICY" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>%d{HH:mm:ss.SSS} %highlight([%-5level]) [%thread] %cyan([%logger{36}]) - %m%n</Pattern>
+		</layout>
+	</appender>
+
+	<appender name="INFO_FILE_POLICY" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>INFO</level>
+		</filter>
+		<file>${LOG_PATH}/info/mocadev-api.log</file>
+		<encoder>
+			<Pattern>%d{HH:mm:ss.SSS} [%-5level] [%thread] [%logger{36}] - %m%n</Pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_PATH}/date_log/%d{yyyy_MM_dd}_%i.mocadev-api.log
+			</fileNamePattern>
+			<maxFileSize>50MB</maxFileSize>
+			<maxHistory>14</maxHistory>
+			<totalSizeCap>1GB</totalSizeCap>
+		</rollingPolicy>
+	</appender>
+
+	<appender name="ERROR_FILE_POLICY" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>ERROR</level>
+		</filter>
+		<file>${LOG_PATH}/error/mocadev-api-error.log</file>
+		<encoder>
+			<Pattern>%d{HH:mm:ss.SSS} [%-5level] [%thread] [%logger{36}] - %m%n</Pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_PATH}/date_log/%d{yyyy_MM_dd}_%i.mocadev-api-error.log</fileNamePattern>
+			<maxFileSize>50MB</maxFileSize>
+			<maxHistory>14</maxHistory>
+			<totalSizeCap>1GB</totalSizeCap>
+		</rollingPolicy>
+	</appender>
+
+	<appender name="SQL_FILE_POLICY" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_PATH}/sql/mocadev-api-sql.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_PATH}/date_log/%d{yyyy_MM_dd}_%i.mocadev-api-sql.log</fileNamePattern>
+			<maxFileSize>50MB</maxFileSize>
+			<maxHistory>14</maxHistory>
+			<totalSizeCap>1GB</totalSizeCap>
+		</rollingPolicy>
+		<encoder>
+			<charset>utf8</charset>
+			<Pattern>%d{HH:mm:ss.SSS} [%-5level] [%thread] [%logger{36}] - %m%n</Pattern>
+		</encoder>
+	</appender>>
+
+	<root level="INFO">
+		<appender-ref ref="LOCAL_CONSOLE_POLICY"/>
+		<appender-ref ref="ERROR_FILE_POLICY"/>
+		<appender-ref ref="INFO_FILE_POLICY"/>
+		<appender-ref ref="SQL_FILE_POLICY"/>
+	</root>
+</configuration>
