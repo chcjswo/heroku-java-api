@@ -11,7 +11,6 @@ import me.mocadev.herokujavaapi.dto.musicsheet.response.MusicSaveResponseDto;
 import me.mocadev.herokujavaapi.service.musicsheet.MusicService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,10 +41,8 @@ public class MusicSheetController {
 	}
 
 	@PostMapping
-	public ResponseEntity<MusicSaveResponseDto> saveMusicSheet(@RequestBody @Valid MusicSheetSaveRequestDto musicSheetSaveRequestDto,
-															   Errors errors) {
-		final MusicSaveResponseDto savedMusic = musicService.saveMusicSheet(
-			musicSheetSaveRequestDto);
+	public ResponseEntity<MusicSaveResponseDto> saveMusicSheet(@RequestBody @Valid MusicSheetSaveRequestDto musicSheetSaveRequestDto) {
+		final MusicSaveResponseDto savedMusic = musicService.saveMusicSheet(musicSheetSaveRequestDto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(savedMusic);
 	}
 

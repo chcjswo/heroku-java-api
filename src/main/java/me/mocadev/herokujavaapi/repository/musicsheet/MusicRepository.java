@@ -15,4 +15,6 @@ public interface MusicRepository extends MongoRepository<Music, String> {
 	Music findByRoomNameAndRoomPass(String roomName, String roomPass);
 
 	Music findByRandomString(String randomString);
+
+	Music findByRoomName(String roomName);
 }

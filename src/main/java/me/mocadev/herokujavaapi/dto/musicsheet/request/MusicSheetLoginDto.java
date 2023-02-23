@@ -1,5 +1,6 @@
 package me.mocadev.herokujavaapi.dto.musicsheet.request;
 
+import javax.validation.constraints.NotEmpty;
 import lombok.Data;
 
 /**
@@ -14,7 +15,10 @@ import lombok.Data;
 @Data
 public class MusicSheetLoginDto {
 
+	@NotEmpty(message = "방 이름은 필수입니다.")
 	private String roomName;
+
+	@NotEmpty(message = "방 비밀번호는 필수입니다.")
 	private String roomPass;
 
 }

@@ -1,5 +1,6 @@
 package me.mocadev.herokujavaapi.dto.musicsheet.request;
 
+import javax.validation.constraints.NotEmpty;
 import lombok.Data;
 
 /**
@@ -14,6 +15,7 @@ import lombok.Data;
 @Data
 public class MusicSheetRandomStringLoginDto {
 
+	@NotEmpty(message = "필수값 입니다.")
 	private String randomString;
 
 }
