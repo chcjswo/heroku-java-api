@@ -2,3 +2,5 @@ spring:
     data:
         mongodb:
             uri: ${MONGO_URI}
+        embedded:
+            version: 3.5.5

@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @github https://github.com/chcjswo
  * @since 2023-02-18
  **/
-@RequestMapping("/api/v1/music")
+@RequestMapping("/api/v1/musics")
 @RequiredArgsConstructor
 @RestController
 public class MusicSheetController {

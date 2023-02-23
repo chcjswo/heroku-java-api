@@ -1,5 +1,6 @@
 package me.mocadev.herokujavaapi.document.musicsheet;
 
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -9,6 +10,7 @@ import lombok.Data;
  * @github https://github.com/chcjswo
  * @since 2023-02-19
  **/
+@Builder
 @Data
 public class MusicSheet {
 

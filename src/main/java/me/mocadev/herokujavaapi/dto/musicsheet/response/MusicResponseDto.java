@@ -1,7 +1,8 @@
 package me.mocadev.herokujavaapi.dto.musicsheet.response;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import lombok.Builder;
 import lombok.Data;
 import me.mocadev.herokujavaapi.document.musicsheet.MusicSheet;
 
@@ -12,6 +13,7 @@ import me.mocadev.herokujavaapi.document.musicsheet.MusicSheet;
  * @github https://github.com/chcjswo
  * @since 2023-02-20
  **/
+@Builder
 @Data
 public class MusicResponseDto {
 
@@ -22,5 +24,5 @@ public class MusicResponseDto {
 	private String videoUrl;
 	private String memo;
 	private String randomString;
-	private LocalDate regDate;
+	private LocalDateTime regDate;
 }
