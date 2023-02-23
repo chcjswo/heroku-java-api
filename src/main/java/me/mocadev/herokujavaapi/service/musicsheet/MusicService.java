@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.mocadev.herokujavaapi.common.exception.InvalidMusicRoomEntranceException;
 import me.mocadev.herokujavaapi.common.exception.MusicConflictException;
+import me.mocadev.herokujavaapi.common.exception.MusicRoomNotFoundException;
 import me.mocadev.herokujavaapi.common.util.CommonUtils;
 import me.mocadev.herokujavaapi.document.musicsheet.Music;
 import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicSheetLoginDto;
@@ -50,7 +51,9 @@ public class MusicService {
 
 	@Transactional
 	public void deleteMusicSheet(String id) {
-		musicRepository.deleteById(id);
+		musicRepository.delete(
+			musicRepository.findById(id)
+				.orElseThrow(MusicRoomNotFoundException::new));
 	}
 
 	@Transactional

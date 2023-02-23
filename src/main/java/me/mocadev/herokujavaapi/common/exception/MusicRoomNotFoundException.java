@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
  **/
 public class MusicRoomNotFoundException extends MocadevException {
 
-	private static final String MESSAGE = "해당 방이 존재하지 않습니다.";
+	private static final String MESSAGE = "fail.music.room.not.found";
 
 	public MusicRoomNotFoundException() {
 		super(MESSAGE);
@@ -19,6 +19,6 @@ public class MusicRoomNotFoundException extends MocadevException {
 
 	@Override
 	public int getStatusCode() {
-		return HttpStatus.CONFLICT.value();
+		return HttpStatus.NOT_FOUND.value();
 	}
 }
