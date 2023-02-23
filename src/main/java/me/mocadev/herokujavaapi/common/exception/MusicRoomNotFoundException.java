@@ -9,11 +9,11 @@ import org.springframework.http.HttpStatus;
  * @github https://github.com/chcjswo
  * @since 2023-02-23
  **/
-public class MusicConflictException extends MocadevException {
+public class MusicRoomNotFoundException extends MocadevException {
 
-	private static final String MESSAGE = "room.already.registered";
+	private static final String MESSAGE = "해당 방이 존재하지 않습니다.";
 
-	public MusicConflictException() {
+	public MusicRoomNotFoundException() {
 		super(MESSAGE);
 	}
 

@@ -9,16 +9,14 @@ import org.springframework.http.HttpStatus;
  * @github https://github.com/chcjswo
  * @since 2023-02-23
  **/
-public class MusicConflictException extends MocadevException {
+public class InvalidMusicRoomEntranceException extends MocadevException {
 
-	private static final String MESSAGE = "room.already.registered";
-
-	public MusicConflictException() {
-		super(MESSAGE);
+	public InvalidMusicRoomEntranceException(String message) {
+		super(message);
 	}
 
 	@Override
 	public int getStatusCode() {
-		return HttpStatus.CONFLICT.value();
+		return HttpStatus.UNAUTHORIZED.value();
 	}
 }

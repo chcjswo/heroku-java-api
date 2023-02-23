@@ -54,7 +54,7 @@ public class ExceptionAdvice {
 	public ResponseEntity<ErrorResponse> mocadevException(MocadevException e) {
 		final ErrorResponse response = ErrorResponse.builder()
 			.code(e.getStatusCode())
-			.message(e.getMessage())
+			.message(messageService.getMessageFromProperties(e.getMessage()))
 			.build();
 		log.error("[ERROR] {} ", e.getMessage(), e);
 		return ResponseEntity.status(e.getStatusCode()).body(response);

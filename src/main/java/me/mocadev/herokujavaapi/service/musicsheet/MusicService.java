@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import me.mocadev.herokujavaapi.common.exception.InvalidMusicRoomEntranceException;
 import me.mocadev.herokujavaapi.common.exception.MusicConflictException;
 import me.mocadev.herokujavaapi.common.util.CommonUtils;
 import me.mocadev.herokujavaapi.document.musicsheet.Music;
@@ -57,7 +58,7 @@ public class MusicService {
 		final Music result = musicRepository.findByRoomNameAndRoomPass(musicSheetLoginDto.getRoomName(),
 			musicSheetLoginDto.getRoomPass());
 		if (Objects.isNull(result)) {
-			throw new RuntimeException("login fail, data not match");
+			throw new InvalidMusicRoomEntranceException("invalid.roomName.roomPass");
 		}
 	}
 
@@ -65,7 +66,7 @@ public class MusicService {
 	public void entranceByRandomString(MusicSheetRandomStringLoginDto musicSheetRandomStringLoginDto) {
 		final Music result = musicRepository.findByRandomString(musicSheetRandomStringLoginDto.getRandomString());
 		if (Objects.isNull(result)) {
-			throw new RuntimeException("login fail, data not match");
+			throw new InvalidMusicRoomEntranceException("invalid.room.randomString");
 		}
 	}
 
