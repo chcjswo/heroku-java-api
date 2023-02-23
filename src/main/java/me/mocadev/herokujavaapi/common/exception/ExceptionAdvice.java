@@ -49,4 +49,14 @@ public class ExceptionAdvice {
 		log.error("[FAIL VALIDATION] {} ", e.getMessage(), e);
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 	}
+
+	@ExceptionHandler(MocadevException.class)
+	public ResponseEntity<ErrorResponse> mocadevException(MocadevException e) {
+		final ErrorResponse response = ErrorResponse.builder()
+			.code(e.getStatusCode())
+			.message(e.getMessage())
+			.build();
+		log.error("[ERROR] {} ", e.getMessage(), e);
+		return ResponseEntity.status(e.getStatusCode()).body(response);
+	}
 }

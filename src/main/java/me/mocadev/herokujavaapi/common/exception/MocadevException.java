@@ -1,8 +1,5 @@
 package me.mocadev.herokujavaapi.common.exception;
 
-import lombok.Getter;
-import org.springframework.http.HttpStatus;
-
 /**
  * Custom Exception 정의
  *
@@ -14,17 +11,13 @@ import org.springframework.http.HttpStatus;
  **/
 public abstract class MocadevException extends RuntimeException {
 
-	@Getter
-	private final HttpStatus httpStatus;
-	@Getter
-	private final String message;
-	@Getter
-	private final Object data;
-
-	protected MocadevException(HttpStatus httpStatus, String message, Object data) {
+	public MocadevException(String message) {
 		super(message);
-		this.httpStatus = httpStatus;
-		this.message = message;
-		this.data = data;
 	}
+
+	public MocadevException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
+	public abstract int getStatusCode();
 }
