@@ -17,5 +17,4 @@ public class MusicRoomRandomStringLoginDto {
 
 	@NotEmpty(message = "필수값 입니다.")
 	private String randomString;
-
 }

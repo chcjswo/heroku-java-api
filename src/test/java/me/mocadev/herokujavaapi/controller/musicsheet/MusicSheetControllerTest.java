@@ -25,6 +25,7 @@ import java.util.List;
 import me.mocadev.herokujavaapi.common.service.MessageService;
 import me.mocadev.herokujavaapi.document.musicsheet.MusicSheet;
 import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicRoomLoginDto;
+import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicRoomRandomStringLoginDto;
 import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicRoomSaveRequestDto;
 import me.mocadev.herokujavaapi.dto.musicsheet.response.MusicResponseDto;
 import me.mocadev.herokujavaapi.dto.musicsheet.response.MusicSaveResponseDto;
@@ -237,7 +238,22 @@ class MusicSheetControllerTest {
 
 	@DisplayName("랜덤 문자열로 방 입장 테스트")
 	@Test
-	void entranceByRandomString() {
+	void entranceByRandomString() throws Exception {
+		MusicRoomRandomStringLoginDto requestDto = new MusicRoomRandomStringLoginDto();
+		requestDto.setRandomString("12345678");
+
+		ResultActions resultActions = mockMvc.perform(post(API_URL + "/entrance/random")
+				.contentType(MediaType.APPLICATION_JSON_VALUE)
+				.content(objectMapper.writeValueAsString(requestDto)))
+			.andExpect(status().isOk());
+
+		verify(musicService, times(1)).entranceByRandomString(any());
+
+		resultActions.andDo(document("login-music-room-random-string",
+			requestFields(
+				fieldWithPath("randomString").type(JsonFieldType.STRING).description("방 입장 문자열")
+			)
+		));
 	}
 
 	private static MusicSheet getMusicSheet(String title, String url) {
