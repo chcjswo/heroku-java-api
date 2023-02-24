@@ -3,7 +3,9 @@ package me.mocadev.herokujavaapi.dto.musicsheet.request;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import javax.validation.constraints.NotEmpty;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import me.mocadev.herokujavaapi.document.musicsheet.Music;
 import me.mocadev.herokujavaapi.document.musicsheet.MusicSheet;
 
@@ -15,6 +17,7 @@ import me.mocadev.herokujavaapi.document.musicsheet.MusicSheet;
  * @since 2023-02-20
  **/
 @Data
+@NoArgsConstructor
 public class MusicRoomSaveRequestDto {
 
 	@NotEmpty(message = "방 이름은 필수입니다.")
@@ -40,5 +43,14 @@ public class MusicRoomSaveRequestDto {
 			.memo(memo)
 			.randomString(randomString)
 			.build();
+	}
+
+	@Builder
+	public MusicRoomSaveRequestDto(String roomName, String roomPass, List<MusicSheet> musicSheets, String videoUrl, String memo) {
+		this.roomName = roomName;
+		this.roomPass = roomPass;
+		this.musicSheets = musicSheets;
+		this.videoUrl = videoUrl;
+		this.memo = memo;
 	}
 }

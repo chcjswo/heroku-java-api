@@ -2,12 +2,14 @@ package me.mocadev.herokujavaapi.controller.musicsheet;
 
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.removeHeaders;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -16,12 +18,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.time.LocalDateTime;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 import me.mocadev.herokujavaapi.common.service.MessageService;
 import me.mocadev.herokujavaapi.document.musicsheet.MusicSheet;
+import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicRoomSaveRequestDto;
 import me.mocadev.herokujavaapi.dto.musicsheet.response.MusicResponseDto;
+import me.mocadev.herokujavaapi.dto.musicsheet.response.MusicSaveResponseDto;
 import me.mocadev.herokujavaapi.service.musicsheet.MusicService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -30,6 +34,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -50,14 +55,19 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 @ExtendWith(RestDocumentationExtension.class)
 class MusicSheetControllerTest {
 
+	private static final String API_URL = "/api/v1/musics";
+
 	@Autowired
-	protected MockMvc mockMvc;
+	private MockMvc mockMvc;
 
 	@MockBean
-	protected MusicService musicService;
+	private MusicService musicService;
 
 	@MockBean
-	protected MessageService messageService;
+	private MessageService messageService;
+
+	@Autowired
+	private ObjectMapper objectMapper;
 
 	@BeforeEach
 	void setup(WebApplicationContext webApplicationContext,
@@ -83,7 +93,6 @@ class MusicSheetControllerTest {
 	@DisplayName("전체 조회 테스트")
 	@Test
 	void findAll() throws Exception {
-		// given
 		List<MusicResponseDto> results = new ArrayList<>();
 
 		final MusicSheet musicSheet1 = MusicSheet.builder()
@@ -104,7 +113,6 @@ class MusicSheetControllerTest {
 			.videoUrl("")
 			.memo("")
 			.randomString("12345678")
-			.regDate(LocalDateTime.now())
 			.build();
 
 		final MusicResponseDto data2 = MusicResponseDto.builder()
@@ -115,7 +123,6 @@ class MusicSheetControllerTest {
 			.videoUrl("https://youtube.com/2134dsafe")
 			.memo("test memo")
 			.randomString("12345678")
-			.regDate(LocalDateTime.now())
 			.build();
 
 		results.add(data1);
@@ -123,19 +130,16 @@ class MusicSheetControllerTest {
 
 		given(musicService.findAll()).willReturn(results);
 
-		// when
-		ResultActions result = mockMvc.perform(get("/api/v1/musics"))
+		ResultActions resultActions = mockMvc.perform(get(API_URL))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$").isArray())
 			.andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1))))
 			.andExpect(jsonPath("$.[0].musicSheets").isArray())
 			.andExpect(jsonPath("$.[0].musicSheets", hasSize(greaterThanOrEqualTo(1))));
 
-		// then
 		verify(musicService, times(1)).findAll();
 
-		// document
-		result.andDo(document("music-find-all",
+		resultActions.andDo(document("find-all-music-room",
 			responseFields(
 				fieldWithPath("[].id").description("아이디"),
 				fieldWithPath("[].roomName").description("방 이름"),
@@ -152,7 +156,67 @@ class MusicSheetControllerTest {
 
 	@DisplayName("악보 저장 테스트")
 	@Test
-	void saveMusicSheet() {
+	void saveMusicSheet() throws Exception {
+
+		final MusicSheet musicSheet1 = MusicSheet.builder()
+			.sheetTitle("sheet title 1")
+			.sheetUrl("https://naver.com/1.jpg")
+			.build();
+
+		final MusicSheet musicSheet2 = MusicSheet.builder()
+			.sheetTitle("sheet title 2")
+			.sheetUrl("https://naver.com/2.jpg")
+			.build();
+
+		MusicRoomSaveRequestDto requestDto = MusicRoomSaveRequestDto.builder()
+			.roomName("room name")
+			.roomPass("password")
+			.musicSheets(List.of(musicSheet1, musicSheet2))
+			.videoUrl("https://youtube.com/234dafd")
+			.memo("test memo")
+			.build();
+
+		MusicSaveResponseDto result = MusicSaveResponseDto.builder()
+			.id("234sdfdsf3asdf")
+			.roomName(requestDto.getRoomName())
+			.roomPass(requestDto.getRoomPass())
+			.musicSheets(requestDto.getMusicSheets())
+			.randomString("12345678")
+			.videoUrl(requestDto.getVideoUrl())
+			.memo(requestDto.getMemo())
+			.build();
+
+		given(musicService.saveMusicSheet(any())).willReturn(result);
+
+		ResultActions resultActions = mockMvc.perform(post(API_URL)
+				.contentType(MediaType.APPLICATION_JSON_VALUE)
+				.content(objectMapper.writeValueAsString(requestDto)))
+			.andExpect(status().isCreated())
+			.andExpect(jsonPath("id").exists())
+			.andExpect(jsonPath("roomName").exists())
+			.andExpect(jsonPath("roomPass").exists())
+			.andExpect(jsonPath("musicSheets").exists())
+			.andExpect(jsonPath("musicSheets").isArray())
+			.andExpect(jsonPath("musicSheets.[0].sheetTitle").exists())
+			.andExpect(jsonPath("musicSheets.[0].sheetUrl").exists())
+			.andExpect(jsonPath("randomString").exists())
+			.andExpect(jsonPath("regDate").exists());
+
+		verify(musicService, times(1)).saveMusicSheet(any());
+
+		resultActions.andDo(document("save-music-room",
+			responseFields(
+				fieldWithPath("id").description("아이디"),
+				fieldWithPath("roomName").description("방 이름"),
+				fieldWithPath("roomPass").description("방 패스워드"),
+				fieldWithPath("musicSheets.[].sheetTitle").description("악보 제목"),
+				fieldWithPath("musicSheets.[].sheetUrl").description("악보 URL"),
+				fieldWithPath("videoUrl").description("영상 URL"),
+				fieldWithPath("memo").description("메모"),
+				fieldWithPath("randomString").description("방 입장 문자"),
+				fieldWithPath("regDate").description("등록일")
+			)
+		));
 	}
 
 	@DisplayName("악보 삭제 테스트")
