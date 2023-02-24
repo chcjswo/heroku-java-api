@@ -8,6 +8,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
@@ -15,6 +16,8 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.re
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -210,7 +213,17 @@ class MusicSheetControllerTest {
 
 	@DisplayName("악보 삭제 테스트")
 	@Test
-	void deleteMusicSheet() {
+	void deleteMusicSheet() throws Exception {
+		ResultActions resultActions = mockMvc.perform(delete(API_URL + "/{id}", "606137f5e9f41a001593cd5a"))
+			.andExpect(status().isOk());
+
+		verify(musicService, times(1)).deleteMusicSheet(any());
+
+		resultActions.andDo(document("delete-music-room",
+			pathParameters(
+				parameterWithName("id").description("방 고유 아이디")
+			)
+		));
 	}
 
 	@DisplayName("방 이름, 패스워드로 방 입장 테스트")
