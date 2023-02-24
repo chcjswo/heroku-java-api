@@ -13,7 +13,7 @@ import lombok.Data;
  * @since 2023-02-22
  **/
 @Data
-public class MusicSheetLoginDto {
+public class MusicRoomLoginDto {
 
 	@NotEmpty(message = "방 이름은 필수입니다.")
 	private String roomName;

@@ -1,7 +1,9 @@
 package me.mocadev.herokujavaapi.document.musicsheet;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * @author chcjswo
@@ -10,11 +12,17 @@ import lombok.Data;
  * @github https://github.com/chcjswo
  * @since 2023-02-19
  **/
-@Builder
-@Data
+@Getter
+@EqualsAndHashCode
+@NoArgsConstructor
 public class MusicSheet {
 
 	private String sheetTitle;
 	private String sheetUrl;
 
+	@Builder
+	public MusicSheet(String sheetTitle, String sheetUrl) {
+		this.sheetTitle = sheetTitle;
+		this.sheetUrl = sheetUrl;
+	}
 }

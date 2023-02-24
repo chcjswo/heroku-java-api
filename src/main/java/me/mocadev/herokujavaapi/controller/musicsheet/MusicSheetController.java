@@ -3,9 +3,9 @@ package me.mocadev.herokujavaapi.controller.musicsheet;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicSheetLoginDto;
-import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicSheetRandomStringLoginDto;
-import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicSheetSaveRequestDto;
+import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicRoomLoginDto;
+import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicRoomRandomStringLoginDto;
+import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicRoomSaveRequestDto;
 import me.mocadev.herokujavaapi.dto.musicsheet.response.MusicResponseDto;
 import me.mocadev.herokujavaapi.dto.musicsheet.response.MusicSaveResponseDto;
 import me.mocadev.herokujavaapi.service.musicsheet.MusicService;
@@ -41,8 +41,8 @@ public class MusicSheetController {
 	}
 
 	@PostMapping
-	public ResponseEntity<MusicSaveResponseDto> saveMusicSheet(@RequestBody @Valid MusicSheetSaveRequestDto musicSheetSaveRequestDto) {
-		final MusicSaveResponseDto savedMusic = musicService.saveMusicSheet(musicSheetSaveRequestDto);
+	public ResponseEntity<MusicSaveResponseDto> saveMusicSheet(@RequestBody @Valid MusicRoomSaveRequestDto musicRoomSaveRequestDto) {
+		final MusicSaveResponseDto savedMusic = musicService.saveMusicSheet(musicRoomSaveRequestDto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(savedMusic);
 	}
 
@@ -53,14 +53,14 @@ public class MusicSheetController {
 	}
 
 	@PostMapping("/entrance")
-	public ResponseEntity<Void> entranceByNameAndPass(@RequestBody @Valid MusicSheetLoginDto musicSheetLoginDto) {
-		musicService.entranceByNameAndPass(musicSheetLoginDto);
+	public ResponseEntity<Void> entranceByNameAndPass(@RequestBody @Valid MusicRoomLoginDto musicRoomLoginDto) {
+		musicService.entranceByNameAndPass(musicRoomLoginDto);
 		return ResponseEntity.ok().build();
 	}
 
 	@PostMapping("/entrance/random")
-	public ResponseEntity<Void> entranceByRandomString(@RequestBody @Valid MusicSheetRandomStringLoginDto musicSheetRandomStringLoginDto) {
-		musicService.entranceByRandomString(musicSheetRandomStringLoginDto);
+	public ResponseEntity<Void> entranceByRandomString(@RequestBody @Valid MusicRoomRandomStringLoginDto musicRoomRandomStringLoginDto) {
+		musicService.entranceByRandomString(musicRoomRandomStringLoginDto);
 		return ResponseEntity.ok().build();
 
 	}

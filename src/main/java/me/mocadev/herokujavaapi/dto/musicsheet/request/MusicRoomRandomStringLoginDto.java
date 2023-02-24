@@ -13,7 +13,7 @@ import lombok.Data;
  * @since 2023-02-22
  **/
 @Data
-public class MusicSheetRandomStringLoginDto {
+public class MusicRoomRandomStringLoginDto {
 
 	@NotEmpty(message = "필수값 입니다.")
 	private String randomString;

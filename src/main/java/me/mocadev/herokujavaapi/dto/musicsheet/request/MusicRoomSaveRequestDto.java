@@ -15,7 +15,7 @@ import me.mocadev.herokujavaapi.document.musicsheet.MusicSheet;
  * @since 2023-02-20
  **/
 @Data
-public class MusicSheetSaveRequestDto {
+public class MusicRoomSaveRequestDto {
 
 	@NotEmpty(message = "방 이름은 필수입니다.")
 	private String roomName;
