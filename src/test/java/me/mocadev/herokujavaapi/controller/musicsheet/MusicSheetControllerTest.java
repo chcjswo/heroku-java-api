@@ -95,15 +95,8 @@ class MusicSheetControllerTest {
 	void findAll() throws Exception {
 		List<MusicResponseDto> results = new ArrayList<>();
 
-		final MusicSheet musicSheet1 = MusicSheet.builder()
-			.sheetTitle("sheet title 1")
-			.sheetUrl("https://naver.com/1.jpg")
-			.build();
-
-		final MusicSheet musicSheet2 = MusicSheet.builder()
-			.sheetTitle("sheet title 2")
-			.sheetUrl("https://naver.com/2.jpg")
-			.build();
+		final MusicSheet musicSheet1 = getMusicSheet("sheet title 1", "https://naver.com/1.jpg");
+		final MusicSheet musicSheet2 = getMusicSheet("sheet title 2", "https://naver.com/2.jpg");
 
 		final MusicResponseDto data1 = MusicResponseDto.builder()
 			.id("606137f5e9f41a001593cd5a")
@@ -157,16 +150,8 @@ class MusicSheetControllerTest {
 	@DisplayName("악보 저장 테스트")
 	@Test
 	void saveMusicSheet() throws Exception {
-
-		final MusicSheet musicSheet1 = MusicSheet.builder()
-			.sheetTitle("sheet title 1")
-			.sheetUrl("https://naver.com/1.jpg")
-			.build();
-
-		final MusicSheet musicSheet2 = MusicSheet.builder()
-			.sheetTitle("sheet title 2")
-			.sheetUrl("https://naver.com/2.jpg")
-			.build();
+		final MusicSheet musicSheet1 = getMusicSheet("sheet title 1", "https://naver.com/1.jpg");
+		final MusicSheet musicSheet2 = getMusicSheet("sheet title 2", "https://naver.com/2.jpg");
 
 		MusicRoomSaveRequestDto requestDto = MusicRoomSaveRequestDto.builder()
 			.roomName("room name")
@@ -232,5 +217,12 @@ class MusicSheetControllerTest {
 	@DisplayName("랜덤 문자열로 방 입장 테스트")
 	@Test
 	void entranceByRandomString() {
+	}
+
+	private static MusicSheet getMusicSheet(String title, String url) {
+		return MusicSheet.builder()
+			.sheetTitle(title)
+			.sheetUrl(url)
+			.build();
 	}
 }
