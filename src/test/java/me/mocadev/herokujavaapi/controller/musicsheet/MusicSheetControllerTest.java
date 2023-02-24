@@ -1,6 +1,7 @@
 package me.mocadev.herokujavaapi.controller.musicsheet;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -12,6 +13,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.re
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDateTime;
@@ -122,30 +124,30 @@ class MusicSheetControllerTest {
 		given(musicService.findAll()).willReturn(results);
 
 		// when
-		ResultActions result = mockMvc.perform(get("/api/v1/musics"));
+		ResultActions result = mockMvc.perform(get("/api/v1/musics"))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$").isArray())
+			.andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1))))
+			.andExpect(jsonPath("$.[0].musicSheets").isArray())
+			.andExpect(jsonPath("$.[0].musicSheets", hasSize(greaterThanOrEqualTo(1))));
 
 		// then
-		assertAll("then",
-			() -> result
-				.andExpect(status().isOk()),
-			() -> verify(musicService, times(1)).findAll()
-		);
+		verify(musicService, times(1)).findAll();
 
 		// document
 		result.andDo(document("music-find-all",
 			responseFields(
-				fieldWithPath("[].id").description("데이터 날짜"),
-				fieldWithPath("[].roomName").description("dau"),
-				fieldWithPath("[].roomPass").description("mau"),
-				fieldWithPath("[].musicSheets.[].sheetTitle").description("예약"),
-				fieldWithPath("[].musicSheets.[].sheetUrl").description("상담"),
-				fieldWithPath("[].videoUrl").description("케어"),
-				fieldWithPath("[].memo").description("백과사전"),
-				fieldWithPath("[].randomString").description("펫톡"),
-				fieldWithPath("[].regDate").description("펫톡")
+				fieldWithPath("[].id").description("아이디"),
+				fieldWithPath("[].roomName").description("방 이름"),
+				fieldWithPath("[].roomPass").description("방 패스워드"),
+				fieldWithPath("[].musicSheets.[].sheetTitle").description("악보 제목"),
+				fieldWithPath("[].musicSheets.[].sheetUrl").description("악보 URL"),
+				fieldWithPath("[].videoUrl").description("영상 URL"),
+				fieldWithPath("[].memo").description("메모"),
+				fieldWithPath("[].randomString").description("방 입장 문자"),
+				fieldWithPath("[].regDate").description("등록일")
 			)
 		));
-
 	}
 
 	@DisplayName("악보 저장 테스트")
