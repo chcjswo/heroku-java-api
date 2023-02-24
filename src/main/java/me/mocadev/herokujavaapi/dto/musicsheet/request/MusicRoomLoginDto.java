@@ -1,7 +1,9 @@
 package me.mocadev.herokujavaapi.dto.musicsheet.request;
 
 import javax.validation.constraints.NotEmpty;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 로그인 DTO
@@ -13,6 +15,7 @@ import lombok.Data;
  * @since 2023-02-22
  **/
 @Data
+@NoArgsConstructor
 public class MusicRoomLoginDto {
 
 	@NotEmpty(message = "방 이름은 필수입니다.")
@@ -21,4 +24,9 @@ public class MusicRoomLoginDto {
 	@NotEmpty(message = "방 비밀번호는 필수입니다.")
 	private String roomPass;
 
+	@Builder
+	public MusicRoomLoginDto(String roomName, String roomPass) {
+		this.roomName = roomName;
+		this.roomPass = roomPass;
+	}
 }

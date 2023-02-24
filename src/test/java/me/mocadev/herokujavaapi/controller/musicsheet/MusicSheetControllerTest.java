@@ -13,6 +13,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.removeHeaders;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import me.mocadev.herokujavaapi.common.service.MessageService;
 import me.mocadev.herokujavaapi.document.musicsheet.MusicSheet;
+import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicRoomLoginDto;
 import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicRoomSaveRequestDto;
 import me.mocadev.herokujavaapi.dto.musicsheet.response.MusicResponseDto;
 import me.mocadev.herokujavaapi.dto.musicsheet.response.MusicSaveResponseDto;
@@ -37,6 +39,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -211,7 +214,25 @@ class MusicSheetControllerTest {
 
 	@DisplayName("방 이름, 패스워드로 방 입장 테스트")
 	@Test
-	void entranceByNameAndPass() {
+	void entranceByNameAndPass() throws Exception {
+		MusicRoomLoginDto requestDto = MusicRoomLoginDto.builder()
+			.roomName("room")
+			.roomPass("password")
+			.build();
+
+		ResultActions resultActions = mockMvc.perform(post(API_URL + "/entrance")
+				.contentType(MediaType.APPLICATION_JSON_VALUE)
+				.content(objectMapper.writeValueAsString(requestDto)))
+			.andExpect(status().isOk());
+
+		verify(musicService, times(1)).entranceByNameAndPass(any());
+
+		resultActions.andDo(document("login-music-room-pass",
+			requestFields(
+				fieldWithPath("roomName").type(JsonFieldType.STRING).description("방 이름"),
+				fieldWithPath("roomPass").type(JsonFieldType.STRING).description("방 비번")
+			)
+		));
 	}
 
 	@DisplayName("랜덤 문자열로 방 입장 테스트")
