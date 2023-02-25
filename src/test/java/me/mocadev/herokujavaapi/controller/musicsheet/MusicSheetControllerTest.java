@@ -146,8 +146,8 @@ class MusicSheetControllerTest {
 				fieldWithPath("[].roomPass").description("방 패스워드"),
 				fieldWithPath("[].musicSheets.[].sheetTitle").description("악보 제목"),
 				fieldWithPath("[].musicSheets.[].sheetUrl").description("악보 URL"),
-				fieldWithPath("[].videoUrl").description("영상 URL"),
-				fieldWithPath("[].memo").description("메모"),
+				fieldWithPath("[].videoUrl").description("영상 URL").optional(),
+				fieldWithPath("[].memo").description("메모").optional(),
 				fieldWithPath("[].randomString").description("방 입장 문자"),
 				fieldWithPath("[].regDate").description("등록일")
 			)
@@ -197,14 +197,22 @@ class MusicSheetControllerTest {
 		verify(musicService, times(1)).saveMusicSheet(any());
 
 		resultActions.andDo(document("save-music-room",
+			requestFields(
+				fieldWithPath("roomName").type(JsonFieldType.STRING).description("방 이름"),
+				fieldWithPath("roomPass").type(JsonFieldType.STRING).description("방 패스워드"),
+				fieldWithPath("musicSheets.[].sheetTitle").type(JsonFieldType.STRING).description("악보 제목"),
+				fieldWithPath("musicSheets.[].sheetUrl").type(JsonFieldType.STRING).description("악보 URL"),
+				fieldWithPath("videoUrl").type(JsonFieldType.STRING).description("영상 URL").optional(),
+				fieldWithPath("memo").type(JsonFieldType.STRING).description("메모").optional()
+			),
 			responseFields(
 				fieldWithPath("id").description("아이디"),
 				fieldWithPath("roomName").description("방 이름"),
 				fieldWithPath("roomPass").description("방 패스워드"),
 				fieldWithPath("musicSheets.[].sheetTitle").description("악보 제목"),
 				fieldWithPath("musicSheets.[].sheetUrl").description("악보 URL"),
-				fieldWithPath("videoUrl").description("영상 URL"),
-				fieldWithPath("memo").description("메모"),
+				fieldWithPath("videoUrl").description("영상 URL").optional(),
+				fieldWithPath("memo").description("메모").optional(),
 				fieldWithPath("randomString").description("방 입장 문자"),
 				fieldWithPath("regDate").description("등록일")
 			)
@@ -215,7 +223,7 @@ class MusicSheetControllerTest {
 	@Test
 	void deleteMusicSheet() throws Exception {
 		ResultActions resultActions = mockMvc.perform(delete(API_URL + "/{id}", "606137f5e9f41a001593cd5a"))
-			.andExpect(status().isOk());
+			.andExpect(status().isNoContent());
 
 		verify(musicService, times(1)).deleteMusicSheet(any());
 

@@ -1,6 +1,5 @@
 package me.mocadev.herokujavaapi.dto.musicsheet.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import javax.validation.constraints.NotEmpty;
 import lombok.Builder;
@@ -27,10 +26,8 @@ public class MusicRoomSaveRequestDto {
 	private String roomPass;
 
 	@NotEmpty(message = "악보 정보는 필수입니다.")
-	@JsonProperty("musicSheet")
 	private List<MusicSheet> musicSheets;
 
-	@JsonProperty("video_url")
 	private String videoUrl;
 	private String memo;
 

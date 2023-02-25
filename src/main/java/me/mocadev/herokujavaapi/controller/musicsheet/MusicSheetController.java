@@ -49,7 +49,7 @@ public class MusicSheetController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteMusicSheet(@PathVariable String id) {
 		musicService.deleteMusicSheet(id);
-		return ResponseEntity.ok().build();
+		return ResponseEntity.noContent().build();
 	}
 
 	@PostMapping("/entrance")

@@ -61,7 +61,7 @@ asciidoctor {
 
 asciidoctor.doFirst {
 	println "===== start asciidoctor ====="
-	delete file("src/main/resources/static/docs")
+	delete file("src/main/resources/static/api/docs")
 }
 
 asciidoctor.doLast {
@@ -71,7 +71,7 @@ asciidoctor.doLast {
 tasks.register('copyDocument', Copy) {
 	dependsOn asciidoctor
 	from file("build/docs/asciidoc")
-	into file("src/main/resources/static/docs")
+	into file("src/main/resources/static/api/docs")
 }
 
 build {
