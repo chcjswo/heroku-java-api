@@ -1,0 +1,16 @@
+[[music-sheet-API]]
+
+=== 1. 전체 조회
+operation::find-all-music-room[snippets='http-request,http-response']
+
+=== 2. 악보 저장
+operation::save-music-room[snippets='http-request,request-fields,http-response,response-fields']
+
+=== 3. 방 이름, 비번으로 입장
+operation::login-music-room-pass[snippets='http-request,request-fields,http-response']
+
+=== 4. 랜덤 문자열로 입장
+operation::login-music-room-random-string[snippets='http-request,request-fields,http-response']
+
+=== 5. 방 삭제
+operation::delete-music-room[snippets='http-request,path-parameters,http-response']

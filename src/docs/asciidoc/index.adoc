@@ -1,0 +1,31 @@
+= Mocadev REST API Document
+전민철
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks: /build/asciidoc/html5/
+
+[[overview]]
+= 소개
+mocadev heroku 서버 API 문서
+
+[[introduction]]
+
+// http verbs 정의
+include::./common/http-verb.adoc[]
+
+// http 상태 코드 정의
+include::./common/http-status-code.adoc[]
+
+ifndef::snippet[]
+:snippet: ./build/generated-snippets
+:root: ./
+endif::[]
+
+= API 목록
+
+== 1. 콘티 공유
+include::./music/music-sheet.adoc[]
+

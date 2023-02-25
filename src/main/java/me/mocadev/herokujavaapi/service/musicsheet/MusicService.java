@@ -10,9 +10,9 @@ import me.mocadev.herokujavaapi.common.exception.MusicConflictException;
 import me.mocadev.herokujavaapi.common.exception.MusicRoomNotFoundException;
 import me.mocadev.herokujavaapi.common.util.CommonUtils;
 import me.mocadev.herokujavaapi.document.musicsheet.Music;
-import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicSheetLoginDto;
-import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicSheetRandomStringLoginDto;
-import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicSheetSaveRequestDto;
+import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicRoomLoginDto;
+import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicRoomRandomStringLoginDto;
+import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicRoomSaveRequestDto;
 import me.mocadev.herokujavaapi.dto.musicsheet.response.MusicResponseDto;
 import me.mocadev.herokujavaapi.dto.musicsheet.response.MusicSaveResponseDto;
 import me.mocadev.herokujavaapi.repository.musicsheet.MusicRepository;
@@ -44,9 +44,9 @@ public class MusicService {
 	}
 
 	@Transactional
-	public MusicSaveResponseDto saveMusicSheet(MusicSheetSaveRequestDto musicSheetSaveRequestDto) {
-		canSave(musicSheetSaveRequestDto);
-		return saveRoom(musicSheetSaveRequestDto);
+	public MusicSaveResponseDto saveMusicSheet(MusicRoomSaveRequestDto musicRoomSaveRequestDto) {
+		canSave(musicRoomSaveRequestDto);
+		return saveRoom(musicRoomSaveRequestDto);
 	}
 
 	@Transactional
@@ -57,30 +57,30 @@ public class MusicService {
 	}
 
 	@Transactional
-	public void entranceByNameAndPass(MusicSheetLoginDto musicSheetLoginDto) {
-		final Music result = musicRepository.findByRoomNameAndRoomPass(musicSheetLoginDto.getRoomName(),
-			musicSheetLoginDto.getRoomPass());
+	public void entranceByNameAndPass(MusicRoomLoginDto musicRoomLoginDto) {
+		final Music result = musicRepository.findByRoomNameAndRoomPass(musicRoomLoginDto.getRoomName(),
+			musicRoomLoginDto.getRoomPass());
 		if (Objects.isNull(result)) {
 			throw new InvalidMusicRoomEntranceException("invalid.roomName.roomPass");
 		}
 	}
 
 	@Transactional
-	public void entranceByRandomString(MusicSheetRandomStringLoginDto musicSheetRandomStringLoginDto) {
-		final Music result = musicRepository.findByRandomString(musicSheetRandomStringLoginDto.getRandomString());
+	public void entranceByRandomString(MusicRoomRandomStringLoginDto musicRoomRandomStringLoginDto) {
+		final Music result = musicRepository.findByRandomString(musicRoomRandomStringLoginDto.getRandomString());
 		if (Objects.isNull(result)) {
 			throw new InvalidMusicRoomEntranceException("invalid.room.randomString");
 		}
 	}
 
-	private MusicSaveResponseDto saveRoom(MusicSheetSaveRequestDto musicSheetSaveRequestDto) {
+	private MusicSaveResponseDto saveRoom(MusicRoomSaveRequestDto musicRoomSaveRequestDto) {
 		final Music music = musicRepository.save(
-			musicSheetSaveRequestDto.toEntity(CommonUtils.getUUID().split("-")[0]));
+			musicRoomSaveRequestDto.toEntity(CommonUtils.getUUID().split("-")[0]));
 		return modelMapper.map(music, MusicSaveResponseDto.class);
 	}
 
-	private void canSave(MusicSheetSaveRequestDto musicSheetSaveRequestDto) {
-		final Music music = musicRepository.findByRoomName(musicSheetSaveRequestDto.getRoomName());
+	private void canSave(MusicRoomSaveRequestDto musicRoomSaveRequestDto) {
+		final Music music = musicRepository.findByRoomName(musicRoomSaveRequestDto.getRoomName());
 		if (!Objects.isNull(music)) {
 			throw new MusicConflictException();
 		}

@@ -4,7 +4,7 @@ import javax.validation.constraints.NotEmpty;
 import lombok.Data;
 
 /**
- * 로그인 DTO
+ * 랜덤 문자열 로그인 DTO
  *
  * @author chcjswo
  * @version 1.0.0
@@ -13,12 +13,8 @@ import lombok.Data;
  * @since 2023-02-22
  **/
 @Data
-public class MusicSheetLoginDto {
+public class MusicRoomRandomStringLoginDto {
 
-	@NotEmpty(message = "방 이름은 필수입니다.")
-	private String roomName;
-
-	@NotEmpty(message = "방 비밀번호는 필수입니다.")
-	private String roomPass;
-
+	@NotEmpty(message = "필수값 입니다.")
+	private String randomString;
 }
