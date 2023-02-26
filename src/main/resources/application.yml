@@ -7,3 +7,17 @@ spring:
 logging:
     file:
         path: logs
+
+management:
+    server:
+        port: ${ACTUATOR_PORT}
+    endpoints:
+        jmx:
+            exposure:
+                exclude: "*"
+        web:
+            exposure:
+                include: health
+            base-path: ${ACTUATOR_PATH}
+        health:
+            enabled: true
