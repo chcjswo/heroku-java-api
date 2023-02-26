@@ -9,8 +9,6 @@ logging:
         path: logs
 
 management:
-    server:
-        port: ${ACTUATOR_PORT}
     endpoints:
         jmx:
             exposure:
