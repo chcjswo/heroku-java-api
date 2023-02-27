@@ -22,19 +22,15 @@ public class MusicResponseDto {
 	private String roomName;
 	private String roomPass;
 	private List<MusicSheet> musicSheets;
-	private String videoUrl;
-	private String memo;
 	private String randomString;
 	private LocalDateTime regDate;
 
 	@Builder
-	public MusicResponseDto(String id, String roomName, String roomPass, List<MusicSheet> musicSheets, String videoUrl, String memo, String randomString) {
+	public MusicResponseDto(String id, String roomName, String roomPass, List<MusicSheet> musicSheets, String randomString) {
 		this.id = id;
 		this.roomName = roomName;
 		this.roomPass = roomPass;
 		this.musicSheets = musicSheets;
-		this.videoUrl = videoUrl;
-		this.memo = memo;
 		this.randomString = randomString;
 		this.regDate = LocalDateTime.now();
 	}
