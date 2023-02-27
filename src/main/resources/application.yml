@@ -19,3 +19,6 @@ management:
             base-path: ${ACTUATOR_PATH}
         health:
             enabled: true
+heroku:
+    server: ${HEROKU_API_SERVER}
+    health: ${heroku.server}${ACTUATOR_PATH}/health
