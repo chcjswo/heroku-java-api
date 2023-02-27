@@ -28,26 +28,19 @@ public class MusicRoomSaveRequestDto {
 	@NotEmpty(message = "악보 정보는 필수입니다.")
 	private List<MusicSheet> musicSheets;
 
-	private String videoUrl;
-	private String memo;
-
 	public Music toEntity(String randomString) {
 		return Music.builder()
 			.roomName(roomName)
 			.roomPass(roomPass)
 			.musicSheets(musicSheets)
-			.videoUrl(videoUrl)
-			.memo(memo)
 			.randomString(randomString)
 			.build();
 	}
 
 	@Builder
-	public MusicRoomSaveRequestDto(String roomName, String roomPass, List<MusicSheet> musicSheets, String videoUrl, String memo) {
+	public MusicRoomSaveRequestDto(String roomName, String roomPass, List<MusicSheet> musicSheets) {
 		this.roomName = roomName;
 		this.roomPass = roomPass;
 		this.musicSheets = musicSheets;
-		this.videoUrl = videoUrl;
-		this.memo = memo;
 	}
 }

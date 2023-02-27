@@ -17,12 +17,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MusicSheet {
 
+	private int index;
 	private String sheetTitle;
 	private String sheetUrl;
+	private String videoUrl;
+	private String memo;
 
 	@Builder
-	public MusicSheet(String sheetTitle, String sheetUrl) {
+	public MusicSheet(int index, String sheetTitle, String sheetUrl, String videoUrl, String memo) {
+		this.index = index;
 		this.sheetTitle = sheetTitle;
 		this.sheetUrl = sheetUrl;
+		this.videoUrl = videoUrl;
+		this.memo = memo;
 	}
 }

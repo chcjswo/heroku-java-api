@@ -601,31 +601,39 @@ Content-Type: application/json;charset=UTF-8
   "roomName" : "1111",
   "roomPass" : "2222",
   "musicSheets" : [ {
+    "index" : 0,
     "sheetTitle" : "sheet title 1",
-    "sheetUrl" : "https://naver.com/1.jpg"
+    "sheetUrl" : "https://naver.com/1.jpg",
+    "videoUrl" : "",
+    "memo" : ""
   }, {
+    "index" : 1,
     "sheetTitle" : "sheet title 2",
-    "sheetUrl" : "https://naver.com/2.jpg"
+    "sheetUrl" : "https://naver.com/2.jpg",
+    "videoUrl" : "https://youtube.com/22222",
+    "memo" : "memo 2"
   } ],
-  "videoUrl" : "",
-  "memo" : "",
   "randomString" : "12345678",
-  "regDate" : "2023-02-25T15:14:30.2775641"
+  "regDate" : "2023-02-27T19:55:47.7271954"
 }, {
   "id" : "606137f5e9f41a001593cd5a",
   "roomName" : "3333",
   "roomPass" : "4444",
   "musicSheets" : [ {
+    "index" : 0,
     "sheetTitle" : "sheet title 1",
-    "sheetUrl" : "https://naver.com/1.jpg"
+    "sheetUrl" : "https://naver.com/1.jpg",
+    "videoUrl" : "",
+    "memo" : ""
   }, {
+    "index" : 1,
     "sheetTitle" : "sheet title 2",
-    "sheetUrl" : "https://naver.com/2.jpg"
+    "sheetUrl" : "https://naver.com/2.jpg",
+    "videoUrl" : "https://youtube.com/22222",
+    "memo" : "memo 2"
   } ],
-  "videoUrl" : "https://youtube.com/2134dsafe",
-  "memo" : "test memo",
   "randomString" : "12345678",
-  "regDate" : "2023-02-25T15:14:30.2775641"
+  "regDate" : "2023-02-27T19:55:47.7271954"
 } ]</code></pre>
 </div>
 </div>
@@ -639,21 +647,25 @@ Content-Type: application/json;charset=UTF-8
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/v1/musics HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 333
+Content-Length: 408
 Host: localhost:8080
 
 {
   "roomName" : "room name",
   "roomPass" : "password",
   "musicSheets" : [ {
+    "index" : 0,
     "sheetTitle" : "sheet title 1",
-    "sheetUrl" : "https://naver.com/1.jpg"
+    "sheetUrl" : "https://naver.com/1.jpg",
+    "videoUrl" : "https://youtube.com/11111",
+    "memo" : "memo 1"
   }, {
+    "index" : 1,
     "sheetTitle" : "sheet title 2",
-    "sheetUrl" : "https://naver.com/2.jpg"
-  } ],
-  "videoUrl" : "https://youtube.com/234dafd",
-  "memo" : "test memo"
+    "sheetUrl" : "https://naver.com/2.jpg",
+    "videoUrl" : "",
+    "memo" : ""
+  } ]
 }</code></pre>
 </div>
 </div>
@@ -689,6 +701,12 @@ Host: localhost:8080
 <td class="tableblock halign-left valign-top"><p class="tableblock">필수</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">musicSheets.[].index</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">순서</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필수</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">musicSheets.[].sheetTitle</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">악보 제목</p></td>
@@ -701,13 +719,13 @@ Host: localhost:8080
 <td class="tableblock halign-left valign-top"><p class="tableblock">필수</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">videoUrl</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">musicSheets.[].videoUrl</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">영상 URL</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">memo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">musicSheets.[].memo</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">메모</p></td>
 <td class="tableblock halign-left valign-top"></td>
@@ -727,16 +745,20 @@ Content-Type: application/json;charset=UTF-8
   "roomName" : "room name",
   "roomPass" : "password",
   "musicSheets" : [ {
+    "index" : 0,
     "sheetTitle" : "sheet title 1",
-    "sheetUrl" : "https://naver.com/1.jpg"
+    "sheetUrl" : "https://naver.com/1.jpg",
+    "videoUrl" : "https://youtube.com/11111",
+    "memo" : "memo 1"
   }, {
+    "index" : 1,
     "sheetTitle" : "sheet title 2",
-    "sheetUrl" : "https://naver.com/2.jpg"
+    "sheetUrl" : "https://naver.com/2.jpg",
+    "videoUrl" : "",
+    "memo" : ""
   } ],
-  "videoUrl" : "https://youtube.com/234dafd",
-  "memo" : "test memo",
   "randomString" : "12345678",
-  "regDate" : "2023-02-25T15:14:30.3955651"
+  "regDate" : "2023-02-27T19:55:47.8461967"
 }</code></pre>
 </div>
 </div>
@@ -778,6 +800,12 @@ Content-Type: application/json;charset=UTF-8
 <td class="tableblock halign-left valign-top"><p class="tableblock">방 패스워드</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">musicSheets.[].index</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">악보 순서</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">musicSheets.[].sheetTitle</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">필수</p></td>
@@ -790,13 +818,13 @@ Content-Type: application/json;charset=UTF-8
 <td class="tableblock halign-left valign-top"><p class="tableblock">악보 URL</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">videoUrl</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">musicSheets.[].videoUrl</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">영상 URL</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">memo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">musicSheets.[].memo</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">메모</p></td>
@@ -977,7 +1005,7 @@ Host: localhost:8080</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-02-25 13:41:27 +0900
+Last updated 2023-02-26 14:50:36 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

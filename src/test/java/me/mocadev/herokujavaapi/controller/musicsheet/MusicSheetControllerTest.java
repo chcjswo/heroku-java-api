@@ -102,16 +102,14 @@ class MusicSheetControllerTest {
 	void findAll() throws Exception {
 		List<MusicResponseDto> results = new ArrayList<>();
 
-		final MusicSheet musicSheet1 = getMusicSheet("sheet title 1", "https://naver.com/1.jpg");
-		final MusicSheet musicSheet2 = getMusicSheet("sheet title 2", "https://naver.com/2.jpg");
+		final MusicSheet musicSheet1 = getMusicSheet(0, "sheet title 1", "https://naver.com/1.jpg", "", "");
+		final MusicSheet musicSheet2 = getMusicSheet(1, "sheet title 2", "https://naver.com/2.jpg", "https://youtube.com/22222", "memo 2");
 
 		final MusicResponseDto data1 = MusicResponseDto.builder()
 			.id("606137f5e9f41a001593cd5a")
 			.roomName("1111")
 			.roomPass("2222")
 			.musicSheets(List.of(musicSheet1, musicSheet2))
-			.videoUrl("")
-			.memo("")
 			.randomString("12345678")
 			.build();
 
@@ -120,8 +118,6 @@ class MusicSheetControllerTest {
 			.roomName("3333")
 			.roomPass("4444")
 			.musicSheets(List.of(musicSheet1, musicSheet2))
-			.videoUrl("https://youtube.com/2134dsafe")
-			.memo("test memo")
 			.randomString("12345678")
 			.build();
 
@@ -144,10 +140,11 @@ class MusicSheetControllerTest {
 				fieldWithPath("[].id").description("아이디"),
 				fieldWithPath("[].roomName").description("방 이름"),
 				fieldWithPath("[].roomPass").description("방 패스워드"),
+				fieldWithPath("[].musicSheets.[].index").description("악보 순서"),
 				fieldWithPath("[].musicSheets.[].sheetTitle").description("악보 제목"),
 				fieldWithPath("[].musicSheets.[].sheetUrl").description("악보 URL"),
-				fieldWithPath("[].videoUrl").description("영상 URL").optional(),
-				fieldWithPath("[].memo").description("메모").optional(),
+				fieldWithPath("[].musicSheets.[].videoUrl").description("영상 URL").optional(),
+				fieldWithPath("[].musicSheets.[].memo").description("메모").optional(),
 				fieldWithPath("[].randomString").description("방 입장 문자"),
 				fieldWithPath("[].regDate").description("등록일")
 			)
@@ -157,15 +154,13 @@ class MusicSheetControllerTest {
 	@DisplayName("악보 저장 테스트")
 	@Test
 	void saveMusicSheet() throws Exception {
-		final MusicSheet musicSheet1 = getMusicSheet("sheet title 1", "https://naver.com/1.jpg");
-		final MusicSheet musicSheet2 = getMusicSheet("sheet title 2", "https://naver.com/2.jpg");
+		final MusicSheet musicSheet1 = getMusicSheet(0, "sheet title 1", "https://naver.com/1.jpg", "https://youtube.com/11111", "memo 1");
+		final MusicSheet musicSheet2 = getMusicSheet(1, "sheet title 2", "https://naver.com/2.jpg", "", "");
 
 		MusicRoomSaveRequestDto requestDto = MusicRoomSaveRequestDto.builder()
 			.roomName("room name")
 			.roomPass("password")
 			.musicSheets(List.of(musicSheet1, musicSheet2))
-			.videoUrl("https://youtube.com/234dafd")
-			.memo("test memo")
 			.build();
 
 		MusicSaveResponseDto result = MusicSaveResponseDto.builder()
@@ -174,8 +169,6 @@ class MusicSheetControllerTest {
 			.roomPass(requestDto.getRoomPass())
 			.musicSheets(requestDto.getMusicSheets())
 			.randomString("12345678")
-			.videoUrl(requestDto.getVideoUrl())
-			.memo(requestDto.getMemo())
 			.build();
 
 		given(musicService.saveMusicSheet(any())).willReturn(result);
@@ -200,19 +193,21 @@ class MusicSheetControllerTest {
 			requestFields(
 				fieldWithPath("roomName").type(JsonFieldType.STRING).description("방 이름"),
 				fieldWithPath("roomPass").type(JsonFieldType.STRING).description("방 패스워드"),
+				fieldWithPath("musicSheets.[].index").type(JsonFieldType.NUMBER).description("순서"),
 				fieldWithPath("musicSheets.[].sheetTitle").type(JsonFieldType.STRING).description("악보 제목"),
 				fieldWithPath("musicSheets.[].sheetUrl").type(JsonFieldType.STRING).description("악보 URL"),
-				fieldWithPath("videoUrl").type(JsonFieldType.STRING).description("영상 URL").optional(),
-				fieldWithPath("memo").type(JsonFieldType.STRING).description("메모").optional()
+				fieldWithPath("musicSheets.[].videoUrl").type(JsonFieldType.STRING).description("영상 URL").optional(),
+				fieldWithPath("musicSheets.[].memo").type(JsonFieldType.STRING).description("메모").optional()
 			),
 			responseFields(
 				fieldWithPath("id").description("아이디"),
 				fieldWithPath("roomName").description("방 이름"),
 				fieldWithPath("roomPass").description("방 패스워드"),
+				fieldWithPath("musicSheets.[].index").description("악보 순서"),
 				fieldWithPath("musicSheets.[].sheetTitle").description("악보 제목"),
 				fieldWithPath("musicSheets.[].sheetUrl").description("악보 URL"),
-				fieldWithPath("videoUrl").description("영상 URL").optional(),
-				fieldWithPath("memo").description("메모").optional(),
+				fieldWithPath("musicSheets.[].videoUrl").description("영상 URL").optional(),
+				fieldWithPath("musicSheets.[].memo").description("메모").optional(),
 				fieldWithPath("randomString").description("방 입장 문자"),
 				fieldWithPath("regDate").description("등록일")
 			)
@@ -277,10 +272,13 @@ class MusicSheetControllerTest {
 		));
 	}
 
-	private static MusicSheet getMusicSheet(String title, String url) {
+	private static MusicSheet getMusicSheet(int index, String title, String url, String videoUrl, String memo) {
 		return MusicSheet.builder()
+			.index(index)
 			.sheetTitle(title)
 			.sheetUrl(url)
+			.videoUrl(videoUrl)
+			.memo(memo)
 			.build();
 	}
 }
