@@ -5,14 +5,15 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import me.mocadev.herokujavaapi.common.exception.InvalidMusicRoomEntranceException;
 import me.mocadev.herokujavaapi.common.exception.MusicConflictException;
 import me.mocadev.herokujavaapi.common.exception.MusicRoomNotFoundException;
 import me.mocadev.herokujavaapi.common.util.CommonUtils;
+import me.mocadev.herokujavaapi.common.util.ValidationUtils;
 import me.mocadev.herokujavaapi.document.musicsheet.Music;
 import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicRoomLoginDto;
 import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicRoomRandomStringLoginDto;
 import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicRoomSaveRequestDto;
+import me.mocadev.herokujavaapi.dto.musicsheet.response.MusicLoginResponseDto;
 import me.mocadev.herokujavaapi.dto.musicsheet.response.MusicResponseDto;
 import me.mocadev.herokujavaapi.dto.musicsheet.response.MusicSaveResponseDto;
 import me.mocadev.herokujavaapi.repository.musicsheet.MusicRepository;
@@ -34,6 +35,7 @@ public class MusicService {
 
 	private final MusicRepository musicRepository;
 	private final ModelMapper modelMapper;
+	private final ValidationUtils validationUtils;
 
 	@Transactional(readOnly = true)
 	public List<MusicResponseDto> findAll() {
@@ -57,20 +59,18 @@ public class MusicService {
 	}
 
 	@Transactional
-	public void entranceByNameAndPass(MusicRoomLoginDto musicRoomLoginDto) {
-		final Music result = musicRepository.findByRoomNameAndRoomPass(musicRoomLoginDto.getRoomName(),
+	public MusicLoginResponseDto entranceByNameAndPass(MusicRoomLoginDto musicRoomLoginDto) {
+		final Music music = musicRepository.findByRoomNameAndRoomPass(musicRoomLoginDto.getRoomName(),
 			musicRoomLoginDto.getRoomPass());
-		if (Objects.isNull(result)) {
-			throw new InvalidMusicRoomEntranceException("invalid.roomName.roomPass");
-		}
+		validationUtils.canEnterMusicRoom(music, "invalid.roomName.roomPass");
+		return modelMapper.map(music, MusicLoginResponseDto.class);
 	}
 
 	@Transactional
-	public void entranceByRandomString(MusicRoomRandomStringLoginDto musicRoomRandomStringLoginDto) {
-		final Music result = musicRepository.findByRandomString(musicRoomRandomStringLoginDto.getRandomString());
-		if (Objects.isNull(result)) {
-			throw new InvalidMusicRoomEntranceException("invalid.room.randomString");
-		}
+	public MusicLoginResponseDto entranceByRandomString(MusicRoomRandomStringLoginDto musicRoomRandomStringLoginDto) {
+		final Music music = musicRepository.findByRandomString(musicRoomRandomStringLoginDto.getRandomString());
+		validationUtils.canEnterMusicRoom(music, "invalid.room.randomString");
+		return modelMapper.map(music, MusicLoginResponseDto.class);
 	}
 
 	private MusicSaveResponseDto saveRoom(MusicRoomSaveRequestDto musicRoomSaveRequestDto) {

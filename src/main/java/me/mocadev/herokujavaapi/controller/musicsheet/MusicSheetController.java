@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicRoomLoginDto;
 import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicRoomRandomStringLoginDto;
 import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicRoomSaveRequestDto;
+import me.mocadev.herokujavaapi.dto.musicsheet.response.MusicLoginResponseDto;
 import me.mocadev.herokujavaapi.dto.musicsheet.response.MusicResponseDto;
 import me.mocadev.herokujavaapi.dto.musicsheet.response.MusicSaveResponseDto;
 import me.mocadev.herokujavaapi.service.musicsheet.MusicService;
@@ -53,15 +54,15 @@ public class MusicSheetController {
 	}
 
 	@PostMapping("/entrance")
-	public ResponseEntity<Void> entranceByNameAndPass(@RequestBody @Valid MusicRoomLoginDto musicRoomLoginDto) {
-		musicService.entranceByNameAndPass(musicRoomLoginDto);
-		return ResponseEntity.ok().build();
+	public ResponseEntity<MusicLoginResponseDto> entranceByNameAndPass(@RequestBody @Valid MusicRoomLoginDto musicRoomLoginDto) {
+		final MusicLoginResponseDto result = musicService.entranceByNameAndPass(musicRoomLoginDto);
+		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
 
 	@PostMapping("/entrance/random")
-	public ResponseEntity<Void> entranceByRandomString(@RequestBody @Valid MusicRoomRandomStringLoginDto musicRoomRandomStringLoginDto) {
-		musicService.entranceByRandomString(musicRoomRandomStringLoginDto);
-		return ResponseEntity.ok().build();
+	public ResponseEntity<MusicLoginResponseDto> entranceByRandomString(@RequestBody @Valid MusicRoomRandomStringLoginDto musicRoomRandomStringLoginDto) {
+		final MusicLoginResponseDto result = musicService.entranceByRandomString(musicRoomRandomStringLoginDto);
+		return ResponseEntity.status(HttpStatus.OK).body(result);
 
 	}
 }

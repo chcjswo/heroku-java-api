@@ -1,8 +1,11 @@
 package me.mocadev.herokujavaapi.common.util;
 
+import java.util.Objects;
 import javax.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
+import me.mocadev.herokujavaapi.common.exception.InvalidMusicRoomEntranceException;
 import me.mocadev.herokujavaapi.common.service.MessageService;
+import me.mocadev.herokujavaapi.document.musicsheet.Music;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
@@ -24,6 +27,12 @@ public class ValidationUtils {
 	public void hasErrors(Errors errors) {
 		if (errors.hasErrors()) {
 			throw new ValidationException(messageService.getFailValidMessage(errors));
+		}
+	}
+
+	public void canEnterMusicRoom(Music music, String message) {
+		if (Objects.isNull(music)) {
+			throw new InvalidMusicRoomEntranceException(message);
 		}
 	}
 }
