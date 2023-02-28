@@ -613,8 +613,8 @@ Content-Type: application/json;charset=UTF-8
     "videoUrl" : "https://youtube.com/22222",
     "memo" : "memo 2"
   } ],
-  "randomString" : "12345678",
-  "regDate" : "2023-02-27T19:55:47.7271954"
+  "randomString" : "d4e8c3ce",
+  "regDate" : "2023-02-28T23:52:39.7671062"
 }, {
   "id" : "606137f5e9f41a001593cd5a",
   "roomName" : "3333",
@@ -632,8 +632,8 @@ Content-Type: application/json;charset=UTF-8
     "videoUrl" : "https://youtube.com/22222",
     "memo" : "memo 2"
   } ],
-  "randomString" : "12345678",
-  "regDate" : "2023-02-27T19:55:47.7271954"
+  "randomString" : "6adffbc4",
+  "regDate" : "2023-02-28T23:52:39.7671062"
 } ]</code></pre>
 </div>
 </div>
@@ -757,8 +757,8 @@ Content-Type: application/json;charset=UTF-8
     "videoUrl" : "",
     "memo" : ""
   } ],
-  "randomString" : "12345678",
-  "regDate" : "2023-02-27T19:55:47.8461967"
+  "randomString" : "bf23ebae",
+  "regDate" : "2023-02-28T23:52:39.8360772"
 }</code></pre>
 </div>
 </div>
@@ -900,9 +900,112 @@ Host: localhost:8080
 <h4 id="_3_방_이름_비번으로_입장_http_response"><a class="link" href="#_3_방_이름_비번으로_입장_http_response">HTTP response</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK</code></pre>
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+
+{
+  "id" : "123sdfd34",
+  "roomName" : "room",
+  "roomPass" : "password",
+  "musicSheets" : [ {
+    "index" : 0,
+    "sheetTitle" : "sheet title 1",
+    "sheetUrl" : "https://naver.com/1.jpg",
+    "videoUrl" : "",
+    "memo" : ""
+  }, {
+    "index" : 1,
+    "sheetTitle" : "sheet title 2",
+    "sheetUrl" : "https://naver.com/2.jpg",
+    "videoUrl" : "https://youtube.com/22222",
+    "memo" : "memo 2"
+  } ],
+  "randomString" : "d99b40de",
+  "regDate" : "2023-02-28T23:52:39.8040774"
+}</code></pre>
 </div>
 </div>
+</div>
+<div class="sect3">
+<h4 id="_3_방_이름_비번으로_입장_response_fields"><a class="link" href="#_3_방_이름_비번으로_입장_response_fields">Response fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">필드명</th>
+<th class="tableblock halign-left valign-top">타입</th>
+<th class="tableblock halign-left valign-top">필수여부</th>
+<th class="tableblock halign-left valign-top">설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">아이디</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">roomName</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">방 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">roomPass</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">방 패스워드</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">musicSheets.[].index</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">악보 순서</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">musicSheets.[].sheetTitle</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">악보 제목</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">musicSheets.[].sheetUrl</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">악보 URL</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">musicSheets.[].videoUrl</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">영상 URL</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">musicSheets.[].memo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">메모</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">randomString</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">방 입장 문자</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">regDate</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">등록일</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <div class="sect2">
@@ -917,7 +1020,7 @@ Content-Length: 35
 Host: localhost:8080
 
 {
-  "randomString" : "12345678"
+  "randomString" : "a72d2055"
 }</code></pre>
 </div>
 </div>
@@ -953,9 +1056,112 @@ Host: localhost:8080
 <h4 id="_4_랜덤_문자열로_입장_http_response"><a class="link" href="#_4_랜덤_문자열로_입장_http_response">HTTP response</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK</code></pre>
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+
+{
+  "id" : "123sdfd34",
+  "roomName" : "room",
+  "roomPass" : "password",
+  "musicSheets" : [ {
+    "index" : 0,
+    "sheetTitle" : "sheet title 1",
+    "sheetUrl" : "https://naver.com/1.jpg",
+    "videoUrl" : "",
+    "memo" : ""
+  }, {
+    "index" : 1,
+    "sheetTitle" : "sheet title 2",
+    "sheetUrl" : "https://naver.com/2.jpg",
+    "videoUrl" : "https://youtube.com/22222",
+    "memo" : "memo 2"
+  } ],
+  "randomString" : "f77d9301",
+  "regDate" : "2023-02-28T23:52:39.4730762"
+}</code></pre>
 </div>
 </div>
+</div>
+<div class="sect3">
+<h4 id="_4_랜덤_문자열로_입장_response_fields"><a class="link" href="#_4_랜덤_문자열로_입장_response_fields">Response fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">필드명</th>
+<th class="tableblock halign-left valign-top">타입</th>
+<th class="tableblock halign-left valign-top">필수여부</th>
+<th class="tableblock halign-left valign-top">설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">아이디</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">roomName</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">방 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">roomPass</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">방 패스워드</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">musicSheets.[].index</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">악보 순서</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">musicSheets.[].sheetTitle</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">악보 제목</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">musicSheets.[].sheetUrl</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">악보 URL</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">musicSheets.[].videoUrl</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">영상 URL</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">musicSheets.[].memo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">메모</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">randomString</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">방 입장 문자</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">regDate</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">등록일</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <div class="sect2">

@@ -14,4 +14,8 @@ public class CommonUtils {
 	public static String getUUID() {
 		return UUID.randomUUID().toString();
 	}
+
+	public static String getMusicRandomString() {
+		return getUUID().split("-")[0];
+	}
 }
