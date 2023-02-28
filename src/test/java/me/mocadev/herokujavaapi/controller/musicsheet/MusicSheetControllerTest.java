@@ -23,13 +23,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import me.mocadev.herokujavaapi.common.service.MessageService;
+import me.mocadev.herokujavaapi.common.util.CommonUtils;
 import me.mocadev.herokujavaapi.document.musicsheet.MusicSheet;
 import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicRoomLoginDto;
 import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicRoomRandomStringLoginDto;
 import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicRoomSaveRequestDto;
+import me.mocadev.herokujavaapi.dto.musicsheet.response.MusicLoginResponseDto;
 import me.mocadev.herokujavaapi.dto.musicsheet.response.MusicResponseDto;
 import me.mocadev.herokujavaapi.dto.musicsheet.response.MusicSaveResponseDto;
 import me.mocadev.herokujavaapi.service.musicsheet.MusicService;
@@ -110,7 +113,7 @@ class MusicSheetControllerTest {
 			.roomName("1111")
 			.roomPass("2222")
 			.musicSheets(List.of(musicSheet1, musicSheet2))
-			.randomString("12345678")
+			.randomString(CommonUtils.getMusicRandomString())
 			.build();
 
 		final MusicResponseDto data2 = MusicResponseDto.builder()
@@ -118,7 +121,7 @@ class MusicSheetControllerTest {
 			.roomName("3333")
 			.roomPass("4444")
 			.musicSheets(List.of(musicSheet1, musicSheet2))
-			.randomString("12345678")
+			.randomString(CommonUtils.getMusicRandomString())
 			.build();
 
 		results.add(data1);
@@ -168,7 +171,7 @@ class MusicSheetControllerTest {
 			.roomName(requestDto.getRoomName())
 			.roomPass(requestDto.getRoomPass())
 			.musicSheets(requestDto.getMusicSheets())
-			.randomString("12345678")
+			.randomString(CommonUtils.getMusicRandomString())
 			.build();
 
 		given(musicService.saveMusicSheet(any())).willReturn(result);
@@ -237,10 +240,31 @@ class MusicSheetControllerTest {
 			.roomPass("password")
 			.build();
 
+		final MusicSheet musicSheet1 = getMusicSheet(0, "sheet title 1", "https://naver.com/1.jpg", "", "");
+		final MusicSheet musicSheet2 = getMusicSheet(1, "sheet title 2", "https://naver.com/2.jpg", "https://youtube.com/22222", "memo 2");
+
+		MusicLoginResponseDto result = MusicLoginResponseDto.of("123sdfd34",
+			"room",
+			"password",
+			List.of(musicSheet1, musicSheet2),
+			CommonUtils.getMusicRandomString(),
+			LocalDateTime.now());
+
+		given(musicService.entranceByNameAndPass(any())).willReturn(result);
+
 		ResultActions resultActions = mockMvc.perform(post(API_URL + "/entrance")
 				.contentType(MediaType.APPLICATION_JSON_VALUE)
 				.content(objectMapper.writeValueAsString(requestDto)))
-			.andExpect(status().isOk());
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("id").exists())
+			.andExpect(jsonPath("roomName").exists())
+			.andExpect(jsonPath("roomPass").exists())
+			.andExpect(jsonPath("musicSheets").exists())
+			.andExpect(jsonPath("musicSheets").isArray())
+			.andExpect(jsonPath("musicSheets.[0].sheetTitle").exists())
+			.andExpect(jsonPath("musicSheets.[0].sheetUrl").exists())
+			.andExpect(jsonPath("randomString").exists())
+			.andExpect(jsonPath("regDate").exists());
 
 		verify(musicService, times(1)).entranceByNameAndPass(any());
 
@@ -248,6 +272,18 @@ class MusicSheetControllerTest {
 			requestFields(
 				fieldWithPath("roomName").type(JsonFieldType.STRING).description("방 이름"),
 				fieldWithPath("roomPass").type(JsonFieldType.STRING).description("방 비번")
+			),
+			responseFields(
+				fieldWithPath("id").description("아이디"),
+				fieldWithPath("roomName").description("방 이름"),
+				fieldWithPath("roomPass").description("방 패스워드"),
+				fieldWithPath("musicSheets.[].index").description("악보 순서"),
+				fieldWithPath("musicSheets.[].sheetTitle").description("악보 제목"),
+				fieldWithPath("musicSheets.[].sheetUrl").description("악보 URL"),
+				fieldWithPath("musicSheets.[].videoUrl").description("영상 URL").optional(),
+				fieldWithPath("musicSheets.[].memo").description("메모").optional(),
+				fieldWithPath("randomString").description("방 입장 문자"),
+				fieldWithPath("regDate").description("등록일")
 			)
 		));
 	}
@@ -256,18 +292,51 @@ class MusicSheetControllerTest {
 	@Test
 	void entranceByRandomString() throws Exception {
 		MusicRoomRandomStringLoginDto requestDto = new MusicRoomRandomStringLoginDto();
-		requestDto.setRandomString("12345678");
+		requestDto.setRandomString(CommonUtils.getMusicRandomString());
+
+		final MusicSheet musicSheet1 = getMusicSheet(0, "sheet title 1", "https://naver.com/1.jpg", "", "");
+		final MusicSheet musicSheet2 = getMusicSheet(1, "sheet title 2", "https://naver.com/2.jpg", "https://youtube.com/22222", "memo 2");
+
+		MusicLoginResponseDto result = MusicLoginResponseDto.of("123sdfd34",
+			"room",
+			"password",
+			List.of(musicSheet1, musicSheet2),
+			CommonUtils.getMusicRandomString(),
+			LocalDateTime.now());
+
+		given(musicService.entranceByRandomString(any())).willReturn(result);
 
 		ResultActions resultActions = mockMvc.perform(post(API_URL + "/entrance/random")
 				.contentType(MediaType.APPLICATION_JSON_VALUE)
 				.content(objectMapper.writeValueAsString(requestDto)))
-			.andExpect(status().isOk());
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("id").exists())
+			.andExpect(jsonPath("roomName").exists())
+			.andExpect(jsonPath("roomPass").exists())
+			.andExpect(jsonPath("musicSheets").exists())
+			.andExpect(jsonPath("musicSheets").isArray())
+			.andExpect(jsonPath("musicSheets.[0].sheetTitle").exists())
+			.andExpect(jsonPath("musicSheets.[0].sheetUrl").exists())
+			.andExpect(jsonPath("randomString").exists())
+			.andExpect(jsonPath("regDate").exists());
 
 		verify(musicService, times(1)).entranceByRandomString(any());
 
 		resultActions.andDo(document("login-music-room-random-string",
 			requestFields(
 				fieldWithPath("randomString").type(JsonFieldType.STRING).description("방 입장 문자열")
+			),
+			responseFields(
+				fieldWithPath("id").description("아이디"),
+				fieldWithPath("roomName").description("방 이름"),
+				fieldWithPath("roomPass").description("방 패스워드"),
+				fieldWithPath("musicSheets.[].index").description("악보 순서"),
+				fieldWithPath("musicSheets.[].sheetTitle").description("악보 제목"),
+				fieldWithPath("musicSheets.[].sheetUrl").description("악보 URL"),
+				fieldWithPath("musicSheets.[].videoUrl").description("영상 URL").optional(),
+				fieldWithPath("musicSheets.[].memo").description("메모").optional(),
+				fieldWithPath("randomString").description("방 입장 문자"),
+				fieldWithPath("regDate").description("등록일")
 			)
 		));
 	}
