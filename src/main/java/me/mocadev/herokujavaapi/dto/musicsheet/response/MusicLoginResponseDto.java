@@ -19,7 +19,6 @@ public class MusicLoginResponseDto {
 
 	private String id;
 	private String roomName;
-	private String roomPass;
 	private List<MusicSheet> musicSheets;
 	private String randomString;
 	private LocalDateTime regDate;
