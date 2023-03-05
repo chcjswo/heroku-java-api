@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import me.mocadev.herokujavaapi.document.musicsheet.MusicSheet;
 
 /**
@@ -15,6 +16,7 @@ import me.mocadev.herokujavaapi.document.musicsheet.MusicSheet;
  **/
 @Data
 @AllArgsConstructor(staticName = "of")
+@NoArgsConstructor
 public class MusicLoginResponseDto {
 
 	private String id;
