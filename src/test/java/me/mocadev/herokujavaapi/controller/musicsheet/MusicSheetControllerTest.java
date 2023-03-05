@@ -245,6 +245,7 @@ class MusicSheetControllerTest {
 
 		MusicLoginResponseDto result = MusicLoginResponseDto.of("123sdfd34",
 			"room",
+			"password",
 			List.of(musicSheet1, musicSheet2),
 			CommonUtils.getMusicRandomString(),
 			LocalDateTime.now());
@@ -274,6 +275,7 @@ class MusicSheetControllerTest {
 			responseFields(
 				fieldWithPath("id").description("아이디"),
 				fieldWithPath("roomName").description("방 이름"),
+				fieldWithPath("roomPass").description("방 패스워드"),
 				fieldWithPath("musicSheets.[].index").description("악보 순서"),
 				fieldWithPath("musicSheets.[].sheetTitle").description("악보 제목"),
 				fieldWithPath("musicSheets.[].sheetUrl").description("악보 URL"),
@@ -296,6 +298,7 @@ class MusicSheetControllerTest {
 
 		MusicLoginResponseDto result = MusicLoginResponseDto.of("123sdfd34",
 			"room",
+			"password",
 			List.of(musicSheet1, musicSheet2),
 			CommonUtils.getMusicRandomString(),
 			LocalDateTime.now());
@@ -324,6 +327,7 @@ class MusicSheetControllerTest {
 			responseFields(
 				fieldWithPath("id").description("아이디"),
 				fieldWithPath("roomName").description("방 이름"),
+				fieldWithPath("roomPass").description("방 패스워드"),
 				fieldWithPath("musicSheets.[].index").description("악보 순서"),
 				fieldWithPath("musicSheets.[].sheetTitle").description("악보 제목"),
 				fieldWithPath("musicSheets.[].sheetUrl").description("악보 URL"),
