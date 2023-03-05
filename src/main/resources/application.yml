@@ -7,7 +7,6 @@ spring:
 logging:
     file:
         path: logs
-
 management:
     endpoints:
         jmx:
