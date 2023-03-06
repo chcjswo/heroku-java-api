@@ -146,7 +146,7 @@ class MusicSheetControllerTest {
 				fieldWithPath("[].musicSheets.[].index").description("악보 순서"),
 				fieldWithPath("[].musicSheets.[].sheetTitle").description("악보 제목"),
 				fieldWithPath("[].musicSheets.[].sheetUrl").description("악보 URL"),
-				fieldWithPath("[].musicSheets.[].videoUrl").description("영상 URL").optional(),
+				fieldWithPath("[].musicSheets.[].youtubeUrl").description("영상 URL").optional(),
 				fieldWithPath("[].musicSheets.[].memo").description("메모").optional(),
 				fieldWithPath("[].randomString").description("방 입장 문자"),
 				fieldWithPath("[].regDate").description("등록일")
@@ -199,7 +199,7 @@ class MusicSheetControllerTest {
 				fieldWithPath("musicSheets.[].index").type(JsonFieldType.NUMBER).description("순서"),
 				fieldWithPath("musicSheets.[].sheetTitle").type(JsonFieldType.STRING).description("악보 제목"),
 				fieldWithPath("musicSheets.[].sheetUrl").type(JsonFieldType.STRING).description("악보 URL"),
-				fieldWithPath("musicSheets.[].videoUrl").type(JsonFieldType.STRING).description("영상 URL").optional(),
+				fieldWithPath("musicSheets.[].youtubeUrl").type(JsonFieldType.STRING).description("영상 URL").optional(),
 				fieldWithPath("musicSheets.[].memo").type(JsonFieldType.STRING).description("메모").optional()
 			),
 			responseFields(
@@ -209,7 +209,7 @@ class MusicSheetControllerTest {
 				fieldWithPath("musicSheets.[].index").description("악보 순서"),
 				fieldWithPath("musicSheets.[].sheetTitle").description("악보 제목"),
 				fieldWithPath("musicSheets.[].sheetUrl").description("악보 URL"),
-				fieldWithPath("musicSheets.[].videoUrl").description("영상 URL").optional(),
+				fieldWithPath("musicSheets.[].youtubeUrl").description("영상 URL").optional(),
 				fieldWithPath("musicSheets.[].memo").description("메모").optional(),
 				fieldWithPath("randomString").description("방 입장 문자"),
 				fieldWithPath("regDate").description("등록일")
@@ -279,7 +279,7 @@ class MusicSheetControllerTest {
 				fieldWithPath("musicSheets.[].index").description("악보 순서"),
 				fieldWithPath("musicSheets.[].sheetTitle").description("악보 제목"),
 				fieldWithPath("musicSheets.[].sheetUrl").description("악보 URL"),
-				fieldWithPath("musicSheets.[].videoUrl").description("영상 URL").optional(),
+				fieldWithPath("musicSheets.[].youtubeUrl").description("영상 URL").optional(),
 				fieldWithPath("musicSheets.[].memo").description("메모").optional(),
 				fieldWithPath("randomString").description("방 입장 문자"),
 				fieldWithPath("regDate").description("등록일")
@@ -331,7 +331,7 @@ class MusicSheetControllerTest {
 				fieldWithPath("musicSheets.[].index").description("악보 순서"),
 				fieldWithPath("musicSheets.[].sheetTitle").description("악보 제목"),
 				fieldWithPath("musicSheets.[].sheetUrl").description("악보 URL"),
-				fieldWithPath("musicSheets.[].videoUrl").description("영상 URL").optional(),
+				fieldWithPath("musicSheets.[].youtubeUrl").description("영상 URL").optional(),
 				fieldWithPath("musicSheets.[].memo").description("메모").optional(),
 				fieldWithPath("randomString").description("방 입장 문자"),
 				fieldWithPath("regDate").description("등록일")
@@ -339,12 +339,12 @@ class MusicSheetControllerTest {
 		));
 	}
 
-	private static MusicSheet getMusicSheet(int index, String title, String url, String videoUrl, String memo) {
+	private static MusicSheet getMusicSheet(int index, String title, String url, String youtubeUrl, String memo) {
 		return MusicSheet.builder()
 			.index(index)
 			.sheetTitle(title)
 			.sheetUrl(url)
-			.videoUrl(videoUrl)
+			.youtubeUrl(youtubeUrl)
 			.memo(memo)
 			.build();
 	}

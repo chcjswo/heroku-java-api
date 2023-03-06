@@ -33,9 +33,6 @@ public class Music {
 	private String roomPass;
 	@Field("music_sheet")
 	private List<MusicSheet> musicSheets;
-	@Field("video_url")
-	private String videoUrl;
-	private String memo;
 	@Field("random_string")
 	private String randomString;
 	@Field("reg_date")
@@ -45,14 +42,10 @@ public class Music {
 	public Music(String roomName,
 				 String roomPass,
 				 List<MusicSheet> musicSheets,
-				 String videoUrl,
-				 String memo,
 				 String randomString) {
 		this.roomName = roomName;
 		this.roomPass = roomPass;
 		this.musicSheets = musicSheets;
-		this.videoUrl = videoUrl;
-		this.memo = memo;
 		this.randomString = randomString;
 		this.regDate = LocalDateTime.now().plusHours(9);
 	}
