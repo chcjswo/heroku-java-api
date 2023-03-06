@@ -4,6 +4,8 @@ spring:
     data:
         mongodb:
             uri: ${MONGO_URI}
+    jackson:
+        default-property-inclusion: NON_EMPTY
 logging:
     file:
         path: logs
