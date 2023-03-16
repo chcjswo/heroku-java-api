@@ -1,4 +1,4 @@
-package me.mocadev.herokujavaapi.dto.musicsheet.request;
+package me.mocadev.herokujavaapi.musicsheet.dto.request;
 
 import javax.validation.constraints.NotEmpty;
 import lombok.Data;

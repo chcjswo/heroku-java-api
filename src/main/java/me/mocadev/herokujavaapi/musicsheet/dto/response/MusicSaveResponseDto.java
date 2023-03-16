@@ -1,11 +1,11 @@
-package me.mocadev.herokujavaapi.dto.musicsheet.response;
+package me.mocadev.herokujavaapi.musicsheet.dto.response;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import me.mocadev.herokujavaapi.document.musicsheet.MusicSheet;
+import me.mocadev.herokujavaapi.musicsheet.domain.MusicSheet;
 
 /**
  * @author chcjswo

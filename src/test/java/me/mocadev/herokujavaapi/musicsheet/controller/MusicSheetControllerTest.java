@@ -1,4 +1,4 @@
-package me.mocadev.herokujavaapi.controller.musicsheet;
+package me.mocadev.herokujavaapi.musicsheet.controller;
 
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.hasSize;
@@ -28,14 +28,14 @@ import java.util.ArrayList;
 import java.util.List;
 import me.mocadev.herokujavaapi.common.service.MessageService;
 import me.mocadev.herokujavaapi.common.util.CommonUtils;
-import me.mocadev.herokujavaapi.document.musicsheet.MusicSheet;
-import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicRoomLoginDto;
-import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicRoomRandomStringLoginDto;
-import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicRoomSaveRequestDto;
-import me.mocadev.herokujavaapi.dto.musicsheet.response.MusicLoginResponseDto;
-import me.mocadev.herokujavaapi.dto.musicsheet.response.MusicResponseDto;
-import me.mocadev.herokujavaapi.dto.musicsheet.response.MusicSaveResponseDto;
-import me.mocadev.herokujavaapi.service.musicsheet.MusicService;
+import me.mocadev.herokujavaapi.musicsheet.domain.MusicSheet;
+import me.mocadev.herokujavaapi.musicsheet.dto.request.MusicRoomLoginDto;
+import me.mocadev.herokujavaapi.musicsheet.dto.request.MusicRoomRandomStringLoginDto;
+import me.mocadev.herokujavaapi.musicsheet.dto.request.MusicRoomSaveRequestDto;
+import me.mocadev.herokujavaapi.musicsheet.dto.response.MusicLoginResponseDto;
+import me.mocadev.herokujavaapi.musicsheet.dto.response.MusicResponseDto;
+import me.mocadev.herokujavaapi.musicsheet.dto.response.MusicSaveResponseDto;
+import me.mocadev.herokujavaapi.musicsheet.service.MusicService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

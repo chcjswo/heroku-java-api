@@ -1,6 +1,6 @@
-package me.mocadev.herokujavaapi.repository.musicsheet;
+package me.mocadev.herokujavaapi.musicsheet.repository;
 
-import me.mocadev.herokujavaapi.document.musicsheet.Music;
+import me.mocadev.herokujavaapi.musicsheet.domain.Music;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**

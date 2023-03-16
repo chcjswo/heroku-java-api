@@ -1,4 +1,4 @@
-package me.mocadev.herokujavaapi.document.musicsheet;
+package me.mocadev.herokujavaapi.musicsheet.domain;
 
 import java.time.LocalDateTime;
 import java.util.List;

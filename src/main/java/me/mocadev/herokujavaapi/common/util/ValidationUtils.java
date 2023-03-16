@@ -5,7 +5,7 @@ import javax.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import me.mocadev.herokujavaapi.common.exception.InvalidMusicRoomEntranceException;
 import me.mocadev.herokujavaapi.common.service.MessageService;
-import me.mocadev.herokujavaapi.document.musicsheet.Music;
+import me.mocadev.herokujavaapi.musicsheet.domain.Music;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 

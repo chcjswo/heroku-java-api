@@ -1,12 +1,12 @@
-package me.mocadev.herokujavaapi.dto.musicsheet.request;
+package me.mocadev.herokujavaapi.musicsheet.dto.request;
 
 import java.util.List;
 import javax.validation.constraints.NotEmpty;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import me.mocadev.herokujavaapi.document.musicsheet.Music;
-import me.mocadev.herokujavaapi.document.musicsheet.MusicSheet;
+import me.mocadev.herokujavaapi.musicsheet.domain.Music;
+import me.mocadev.herokujavaapi.musicsheet.domain.MusicSheet;
 
 /**
  * @author chcjswo

@@ -1,4 +1,4 @@
-package me.mocadev.herokujavaapi.service.musicsheet;
+package me.mocadev.herokujavaapi.musicsheet.service;
 
 import java.util.List;
 import java.util.Objects;
@@ -9,14 +9,14 @@ import me.mocadev.herokujavaapi.common.exception.MusicConflictException;
 import me.mocadev.herokujavaapi.common.exception.MusicRoomNotFoundException;
 import me.mocadev.herokujavaapi.common.util.CommonUtils;
 import me.mocadev.herokujavaapi.common.util.ValidationUtils;
-import me.mocadev.herokujavaapi.document.musicsheet.Music;
-import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicRoomLoginDto;
-import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicRoomRandomStringLoginDto;
-import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicRoomSaveRequestDto;
-import me.mocadev.herokujavaapi.dto.musicsheet.response.MusicLoginResponseDto;
-import me.mocadev.herokujavaapi.dto.musicsheet.response.MusicResponseDto;
-import me.mocadev.herokujavaapi.dto.musicsheet.response.MusicSaveResponseDto;
-import me.mocadev.herokujavaapi.repository.musicsheet.MusicRepository;
+import me.mocadev.herokujavaapi.musicsheet.domain.Music;
+import me.mocadev.herokujavaapi.musicsheet.dto.request.MusicRoomLoginDto;
+import me.mocadev.herokujavaapi.musicsheet.dto.request.MusicRoomRandomStringLoginDto;
+import me.mocadev.herokujavaapi.musicsheet.dto.request.MusicRoomSaveRequestDto;
+import me.mocadev.herokujavaapi.musicsheet.dto.response.MusicLoginResponseDto;
+import me.mocadev.herokujavaapi.musicsheet.dto.response.MusicResponseDto;
+import me.mocadev.herokujavaapi.musicsheet.dto.response.MusicSaveResponseDto;
+import me.mocadev.herokujavaapi.musicsheet.repository.MusicRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

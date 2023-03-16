@@ -1,4 +1,4 @@
-package me.mocadev.herokujavaapi.document.musicsheet;
+package me.mocadev.herokujavaapi.musicsheet.domain;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
