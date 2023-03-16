@@ -1,15 +1,15 @@
-package me.mocadev.herokujavaapi.controller.musicsheet;
+package me.mocadev.herokujavaapi.musicsheet.controller;
 
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicRoomLoginDto;
-import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicRoomRandomStringLoginDto;
-import me.mocadev.herokujavaapi.dto.musicsheet.request.MusicRoomSaveRequestDto;
-import me.mocadev.herokujavaapi.dto.musicsheet.response.MusicLoginResponseDto;
-import me.mocadev.herokujavaapi.dto.musicsheet.response.MusicResponseDto;
-import me.mocadev.herokujavaapi.dto.musicsheet.response.MusicSaveResponseDto;
-import me.mocadev.herokujavaapi.service.musicsheet.MusicService;
+import me.mocadev.herokujavaapi.musicsheet.dto.request.MusicRoomLoginDto;
+import me.mocadev.herokujavaapi.musicsheet.dto.request.MusicRoomRandomStringLoginDto;
+import me.mocadev.herokujavaapi.musicsheet.dto.request.MusicRoomSaveRequestDto;
+import me.mocadev.herokujavaapi.musicsheet.dto.response.MusicLoginResponseDto;
+import me.mocadev.herokujavaapi.musicsheet.dto.response.MusicResponseDto;
+import me.mocadev.herokujavaapi.musicsheet.dto.response.MusicSaveResponseDto;
+import me.mocadev.herokujavaapi.musicsheet.service.MusicService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
