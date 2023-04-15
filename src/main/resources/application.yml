@@ -25,3 +25,5 @@ heroku:
     health: ${heroku.server}${ACTUATOR_PATH}/health
 document:
     path: ${api.path}
+notification:
+    slack-url: ${SLACK_URL}
