@@ -11,6 +11,10 @@ import java.util.UUID;
  **/
 public class CommonUtils {
 
+	private CommonUtils() {
+		throw new IllegalStateException("Utility class");
+	}
+
 	public static String getUUID() {
 		return UUID.randomUUID().toString();
 	}
