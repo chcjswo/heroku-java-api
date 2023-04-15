@@ -1,4 +1,6 @@
-package me.mocadev.herokujavaapi.common.service;
+package me.mocadev.herokujavaapi.notification.service;
+
+import me.mocadev.herokujavaapi.notification.dto.SlackMessage;
 
 /**
  * @author chcjswo
@@ -9,5 +11,5 @@ package me.mocadev.herokujavaapi.common.service;
  **/
 public interface NotificationService {
 
-	void sendMessage();
+	void sendMessage(SlackMessage slackMessage);
 }
