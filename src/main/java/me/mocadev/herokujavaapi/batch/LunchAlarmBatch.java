@@ -31,11 +31,11 @@ public class LunchAlarmBatch {
 	public static final String EMOJI = ":gookbab:";
 	private final SlackNotificationService slackNotificationService;
 
-	@Scheduled(cron = "0 0 14 * * 1-5")
+	@Scheduled(cron = "0 0 13 * * 1-5")
 	public void lunchAlarm() {
 		List<SlackMessageFields> fields = new ArrayList<>();
 		fields.add(slackNotificationService.makeField("점심시간을 알려드립니다.",
-			"2시 점심시간 입니다. 그만 일하고 점심 드세요!"));
+			"1시 점심시간 입니다. 그만 일하고 점심 드세요!"));
 
 		SlackMessageAttachment attachment = SlackMessageAttachment.builder()
 			.color(COLOR)
