@@ -13,7 +13,6 @@ import org.springframework.data.mongodb.core.mapping.Field;
  * @github https://github.com/chcjswo
  * @since 2023-02-19
  **/
-//@JsonInclude(Include.NON_NULL)
 @Getter
 @EqualsAndHashCode
 @NoArgsConstructor
