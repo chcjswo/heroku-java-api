@@ -1,14 +1,14 @@
 package me.mocadev.herokujavaapi.lunch.controller;
 
 import lombok.RequiredArgsConstructor;
-import me.mocadev.herokujavaapi.lunch.dto.request.LunchCommandSaveRequest;
 import me.mocadev.herokujavaapi.lunch.service.LunchService;
 import me.mocadev.herokujavaapi.notification.dto.SlackMessage;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -31,9 +31,10 @@ public class LunchController {
 		return ResponseEntity.ok().body(result);
 	}
 
-	@PostMapping("/commands/restaurants/new")
-	public ResponseEntity<String> saveRestaurant(@RequestBody LunchCommandSaveRequest dto) {
-		lunchService.saveRestaurant(dto);
+	@PostMapping(path = "/commands/restaurants/new",
+		consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
+	public ResponseEntity<String> saveRestaurant(@RequestParam String text) {
+		lunchService.saveRestaurant(text);
 		return ResponseEntity.status(HttpStatus.CREATED).body("식당을 추가했습니다.");
 	}
 }

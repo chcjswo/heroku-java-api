@@ -13,11 +13,11 @@ import me.mocadev.herokujavaapi.lunch.domain.Restaurants;
 @Data
 public class LunchCommandSaveRequest {
 
-	private String name;
+	private String text;
 
 	public Restaurants toEntity() {
 		return Restaurants.builder()
-			.name(name)
+			.name(text)
 			.build();
 	}
 }
