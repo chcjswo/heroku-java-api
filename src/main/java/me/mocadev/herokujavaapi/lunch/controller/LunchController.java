@@ -37,4 +37,9 @@ public class LunchController {
 		lunchService.saveRestaurant(text);
 		return ResponseEntity.status(HttpStatus.CREATED).body(text + " 식당을 추가했습니다.");
 	}
+
+	@PostMapping("/restaurants/recommends")
+	public void recommendsOfToday() {
+		lunchService.recommendsOfToday();
+	}
 }
