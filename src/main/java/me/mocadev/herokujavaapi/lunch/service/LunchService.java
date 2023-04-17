@@ -2,7 +2,6 @@ package me.mocadev.herokujavaapi.lunch.service;
 
 import lombok.RequiredArgsConstructor;
 import me.mocadev.herokujavaapi.lunch.domain.Restaurants;
-import me.mocadev.herokujavaapi.lunch.dto.request.LunchCommandSaveRequest;
 import me.mocadev.herokujavaapi.lunch.dto.response.LunchCommandListResponse;
 import me.mocadev.herokujavaapi.lunch.repository.RestaurantsRepository;
 import me.mocadev.herokujavaapi.notification.dto.SlackMessage;
@@ -55,7 +54,7 @@ public class LunchService {
 			.build();
 	}
 
-	public void saveRestaurant(LunchCommandSaveRequest dto) {
-		restaurantsRepository.save(dto.toEntity());
+	public void saveRestaurant(String name) {
+		restaurantsRepository.save(Restaurants.builder().name(name).build());
 	}
 }
