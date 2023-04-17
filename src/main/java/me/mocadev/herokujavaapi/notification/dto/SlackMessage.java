@@ -22,13 +22,15 @@ public class SlackMessage {
 	private String emoji;
 	private String channel;
 	private String username;
+	private String text;
 	private List<SlackMessageAttachment> attachments;
 
 	@Builder
-	public SlackMessage(String emoji, String channel, String username, List<SlackMessageAttachment> attachments) {
+	public SlackMessage(String emoji, String channel, String username, String text, List<SlackMessageAttachment> attachments) {
 		this.emoji = emoji;
 		this.channel = channel;
 		this.username = username;
+		this.text = text;
 		this.attachments = attachments;
 	}
 }
