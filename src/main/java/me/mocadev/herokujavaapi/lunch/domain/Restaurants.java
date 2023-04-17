@@ -26,17 +26,19 @@ public class Restaurants {
 	@Field("_id")
 	private ObjectId id;
 	@Field
-	private String choiceCount;
+	private Integer choiceCount;
 	@Field
 	private String name;
 	@Field
-	private String visitCount;
+	private Integer visitCount;
 	@Field
 	private LocalDateTime createdAt;
 
 	@Builder
 	public Restaurants(String name) {
 		this.name = name;
+		this.choiceCount = 0;
+		this.visitCount = 0;
 		this.createdAt = LocalDateTime.now().plusHours(9);
 	}
 }
