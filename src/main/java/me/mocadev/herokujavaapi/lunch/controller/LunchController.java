@@ -35,6 +35,11 @@ public class LunchController {
 		consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
 	public ResponseEntity<String> saveRestaurant(@RequestParam String text) {
 		lunchService.saveRestaurant(text);
-		return ResponseEntity.status(HttpStatus.CREATED).body("식당을 추가했습니다.");
+		return ResponseEntity.status(HttpStatus.CREATED).body(text + " 식당을 추가했습니다.");
+	}
+
+	@PostMapping("/restaurants/recommends")
+	public void recommendsOfToday() {
+		lunchService.recommendsOfToday();
 	}
 }
