@@ -2,6 +2,7 @@ package me.mocadev.herokujavaapi.lunch.service;
 
 import lombok.RequiredArgsConstructor;
 import me.mocadev.herokujavaapi.lunch.domain.Restaurants;
+import me.mocadev.herokujavaapi.lunch.dto.request.LunchCommandSaveRequest;
 import me.mocadev.herokujavaapi.lunch.dto.response.LunchCommandListResponse;
 import me.mocadev.herokujavaapi.lunch.repository.RestaurantsRepository;
 import me.mocadev.herokujavaapi.notification.dto.SlackMessage;
@@ -44,7 +45,6 @@ public class LunchService {
 			.build()));
 
 		SlackMessageAttachment attachment = SlackMessageAttachment.builder()
-			.pretext("선택 가능한 식당")
 			.color("#F35A00")
 			.fields(fields)
 			.build();
@@ -53,5 +53,9 @@ public class LunchService {
 			.text("선택 가능한 식당")
 			.attachments(List.of(attachment))
 			.build();
+	}
+
+	public void saveRestaurant(LunchCommandSaveRequest dto) {
+		restaurantsRepository.save(dto.toEntity());
 	}
 }
