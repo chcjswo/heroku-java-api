@@ -20,14 +20,16 @@ public class SlackMessageAttachment {
 	private final String color;
 	private final String pretext;
 	private final String title;
+	private final String text;
 	private final List<SlackMessageFields> fields;
 
 	@Builder
-	public SlackMessageAttachment(String fallback, String color, String pretext, String title, List<SlackMessageFields> fields) {
+	public SlackMessageAttachment(String fallback, String color, String pretext, String title, String text, List<SlackMessageFields> fields) {
 		this.fallback = fallback;
 		this.color = color;
 		this.pretext = pretext;
 		this.title = title;
+		this.text = text;
 		this.fields = fields;
 	}
 }

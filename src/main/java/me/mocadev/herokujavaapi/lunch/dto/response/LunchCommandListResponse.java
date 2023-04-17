@@ -1,6 +1,8 @@
 package me.mocadev.herokujavaapi.lunch.dto.response;
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
@@ -12,10 +14,19 @@ import java.time.LocalDateTime;
  * @since 2023-04-17
  **/
 @Data
+@NoArgsConstructor
 public class LunchCommandListResponse {
 
-	private final Integer choiceCount;
-	private final String room;
-	private final Integer visitCount;
-	private final LocalDateTime createdAt;
+	private Integer choiceCount;
+	private String name;
+	private Integer visitCount;
+	private LocalDateTime createdAt;
+
+	@Builder
+	public LunchCommandListResponse(Integer choiceCount, String name, Integer visitCount, LocalDateTime createdAt) {
+		this.choiceCount = choiceCount;
+		this.name = name;
+		this.visitCount = visitCount;
+		this.createdAt = createdAt;
+	}
 }

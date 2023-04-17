@@ -2,6 +2,8 @@ package me.mocadev.herokujavaapi.lunch.controller;
 
 import lombok.RequiredArgsConstructor;
 import me.mocadev.herokujavaapi.lunch.service.LunchService;
+import me.mocadev.herokujavaapi.notification.dto.SlackMessage;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +23,8 @@ public class LunchController {
 	private final LunchService lunchService;
 
 	@PostMapping("/commands/restaurants")
-	public void findRestaurantsBySlashCommand() {
-		lunchService.findAll();
+	public ResponseEntity<SlackMessage> findRestaurantsBySlashCommand() {
+		SlackMessage result = lunchService.findAll();
+		return ResponseEntity.ok().body(result);
 	}
 }

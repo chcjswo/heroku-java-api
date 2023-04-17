@@ -4,11 +4,15 @@ import lombok.RequiredArgsConstructor;
 import me.mocadev.herokujavaapi.lunch.domain.Restaurants;
 import me.mocadev.herokujavaapi.lunch.dto.response.LunchCommandListResponse;
 import me.mocadev.herokujavaapi.lunch.repository.RestaurantsRepository;
+import me.mocadev.herokujavaapi.notification.dto.SlackMessage;
+import me.mocadev.herokujavaapi.notification.dto.SlackMessageAttachment;
+import me.mocadev.herokujavaapi.notification.dto.SlackMessageFields;
 import me.mocadev.herokujavaapi.notification.service.SlackNotificationService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,10 +32,26 @@ public class LunchService {
 	private final SlackNotificationService slackNotificationService;
 
 	@Transactional(readOnly = true)
-	public List<LunchCommandListResponse> findAll() {
+	public SlackMessage findAll() {
 		List<Restaurants> restaurants = restaurantsRepository.findAll();
-		return restaurants.stream()
+		List<LunchCommandListResponse> list = restaurants.stream()
 			.map(m -> modelMapper.map(m, LunchCommandListResponse.class))
 			.collect(Collectors.toList());
+
+		List<SlackMessageFields> fields = new ArrayList<>();
+		list.forEach(item -> fields.add(SlackMessageFields.builder()
+			.title(item.getName())
+			.build()));
+
+		SlackMessageAttachment attachment = SlackMessageAttachment.builder()
+			.pretext("선택 가능한 식당")
+			.color("#F35A00")
+			.fields(fields)
+			.build();
+
+		return SlackMessage.builder()
+			.text("선택 가능한 식당")
+			.attachments(List.of(attachment))
+			.build();
 	}
 }
