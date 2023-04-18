@@ -21,7 +21,6 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 import static me.mocadev.herokujavaapi.notification.dto.SlackMessageAction.SlackMessageActionConfirm;
-import static me.mocadev.herokujavaapi.notification.dto.SlackMessageAction.builder;
 
 /**
  * @author chcjswo
@@ -98,7 +97,7 @@ public class LunchService {
 
 	private SlackMessage getSlackMessage(String restaurantName, String lunchChoiceText) {
 		List<SlackMessageAction> actions = new ArrayList<>();
-		actions.add(builder()
+		actions.add(SlackMessageAction.builder()
 			.name(LUNCH)
 			.text("점심 선택")
 			.type("button")
@@ -112,7 +111,7 @@ public class LunchService {
 			.dismissText("그냥 먹을래")
 			.build();
 
-		actions.add(builder()
+		actions.add(SlackMessageAction.builder()
 			.name(LUNCH)
 			.text("다시 선택")
 			.type("button")
