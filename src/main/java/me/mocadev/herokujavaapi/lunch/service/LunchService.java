@@ -2,9 +2,11 @@ package me.mocadev.herokujavaapi.lunch.service;
 
 import lombok.RequiredArgsConstructor;
 import me.mocadev.herokujavaapi.lunch.domain.Restaurants;
+import me.mocadev.herokujavaapi.lunch.dto.SlackRequestPayload;
 import me.mocadev.herokujavaapi.lunch.dto.response.LunchCommandListResponse;
 import me.mocadev.herokujavaapi.lunch.repository.RestaurantsRepository;
 import me.mocadev.herokujavaapi.notification.dto.SlackMessage;
+import me.mocadev.herokujavaapi.notification.dto.SlackMessageAction;
 import me.mocadev.herokujavaapi.notification.dto.SlackMessageAttachment;
 import me.mocadev.herokujavaapi.notification.dto.SlackMessageFields;
 import me.mocadev.herokujavaapi.notification.service.SlackNotificationService;
@@ -18,6 +20,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import static me.mocadev.herokujavaapi.notification.dto.SlackMessageAction.SlackMessageActionConfirm;
+import static me.mocadev.herokujavaapi.notification.dto.SlackMessageAction.builder;
+
 /**
  * @author chcjswo
  * @version 1.0.0
@@ -29,6 +34,7 @@ import java.util.stream.Collectors;
 @Service
 public class LunchService {
 
+	public static final String LUNCH = "lunch";
 	private final RestaurantsRepository restaurantsRepository;
 	private final ModelMapper modelMapper;
 	private final SlackNotificationService slackNotificationService;
@@ -74,6 +80,7 @@ public class LunchService {
 			.build();
 
 		SlackMessage slackMessage = SlackMessage.builder()
+			.text("점심시간 입니다.")
 			.emoji(":gookbab:")
 			.username(USERNAME)
 			.attachments(List.of(attachment))
@@ -83,23 +90,70 @@ public class LunchService {
 	}
 
 	public void recommendsOfToday() {
-		List<Restaurants> restaurants = restaurantsRepository.findAll();
-		Random r = new Random();
-		Restaurants restaurant = restaurants.stream().skip(r.nextInt(restaurants.size())).findFirst().get();
+		String restaurantName = getRestaurantName();
+		String lunchChoiceText = LocalDate.now() + " 오늘의 점심은 *" + restaurantName + "* 어떠세요?";
+		SlackMessage message = getSlackMessage(restaurantName, lunchChoiceText);
+		slackNotificationService.sendMessage(message);
+	}
 
-		SlackMessageAttachment attachment = SlackMessageAttachment.builder()
-			.text(LocalDate.now() + " 오늘의 점심은 *" + restaurant.getName() + "* 어떠세요?")
-			.color("#3AA3E3")
+	private SlackMessage getSlackMessage(String restaurantName, String lunchChoiceText) {
+		List<SlackMessageAction> actions = new ArrayList<>();
+		actions.add(builder()
+			.name(LUNCH)
+			.text("점심 선택")
+			.type("button")
+			.value(restaurantName)
+			.build());
+
+		SlackMessageActionConfirm confirm = SlackMessageActionConfirm.builder()
+			.title("점심 다시 선택??")
+			.text(restaurantName + " 말고 다시 선택 하시겠습니까?")
+			.okText("다시 선택")
+			.dismissText("그냥 먹을래")
 			.build();
 
-		SlackMessage message = SlackMessage.builder()
+		actions.add(builder()
+			.name(LUNCH)
+			.text("다시 선택")
+			.type("button")
+			.style("danger")
+			.value("resend")
+			.confirm(confirm)
+			.build());
+
+		SlackMessageAttachment attachment = SlackMessageAttachment.builder()
+			.text(lunchChoiceText)
+			.color("#3AA3E3")
+			.callbackId(LUNCH)
+			.actions(actions)
+			.build();
+
+		return SlackMessage.builder()
 			.text("점심 선택의 시간입니다.")
 			.username(USERNAME)
 			.emoji(":rice_ball:")
 			.attachments(List.of(attachment))
 			.build();
-
-		slackNotificationService.sendMessage(message);
 	}
 
+	private String getRestaurantName() {
+		List<Restaurants> restaurants = restaurantsRepository.findAll();
+		Random r = new Random();
+		Restaurants restaurant = restaurants.stream().skip(r.nextInt(restaurants.size())).findFirst().get();
+		return restaurant.getName();
+	}
+
+	public void decision(SlackRequestPayload payload) {
+		String userName = payload.getUser().getName();
+		String value = payload.getActions().get(0).getValue();
+		String restaurantName = getRestaurantName();
+		String lunchChoiceText = "오늘의 점심은 *" + restaurantName + "* 어떠세요?";
+
+		if ("resend".equals(value)) {
+			lunchChoiceText = "오늘의 점심은 " + userName +"님이 선택한 *" + restaurantName + "* 입니다.";
+		}
+
+		SlackMessage message = getSlackMessage(restaurantName, lunchChoiceText);
+		slackNotificationService.sendMessage(message);
+	}
 }

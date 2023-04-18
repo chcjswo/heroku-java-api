@@ -1,15 +1,13 @@
 package me.mocadev.herokujavaapi.lunch.controller;
 
 import lombok.RequiredArgsConstructor;
+import me.mocadev.herokujavaapi.lunch.dto.SlackRequestPayload;
 import me.mocadev.herokujavaapi.lunch.service.LunchService;
 import me.mocadev.herokujavaapi.notification.dto.SlackMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author chcjswo
@@ -41,5 +39,10 @@ public class LunchController {
 	@PostMapping("/restaurants/recommends")
 	public void recommendsOfToday() {
 		lunchService.recommendsOfToday();
+	}
+
+	@PostMapping("/restaurants/decision")
+	public void decision(@RequestBody SlackRequestPayload dto) {
+		lunchService.decision(dto);
 	}
 }
