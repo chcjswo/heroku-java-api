@@ -2,6 +2,7 @@ package me.mocadev.herokujavaapi.lunch.service;
 
 import lombok.RequiredArgsConstructor;
 import me.mocadev.herokujavaapi.lunch.domain.Restaurants;
+import me.mocadev.herokujavaapi.lunch.dto.SlackRequestPayload;
 import me.mocadev.herokujavaapi.lunch.dto.response.LunchCommandListResponse;
 import me.mocadev.herokujavaapi.lunch.repository.RestaurantsRepository;
 import me.mocadev.herokujavaapi.notification.dto.SlackMessage;
@@ -33,6 +34,7 @@ import static me.mocadev.herokujavaapi.notification.dto.SlackMessageAction.build
 @Service
 public class LunchService {
 
+	public static final String LUNCH = "lunch";
 	private final RestaurantsRepository restaurantsRepository;
 	private final ModelMapper modelMapper;
 	private final SlackNotificationService slackNotificationService;
@@ -88,17 +90,19 @@ public class LunchService {
 	}
 
 	public void recommendsOfToday() {
-		List<Restaurants> restaurants = restaurantsRepository.findAll();
-		Random r = new Random();
-		Restaurants restaurant = restaurants.stream().skip(r.nextInt(restaurants.size())).findFirst().get();
-		String restaurantName = restaurant.getName();
+		String restaurantName = getRestaurantName();
+		String lunchChoiceText = LocalDate.now() + " 오늘의 점심은 *" + restaurantName + "* 어떠세요?";
+		SlackMessage message = getSlackMessage(restaurantName, lunchChoiceText);
+		slackNotificationService.sendMessage(message);
+	}
 
+	private SlackMessage getSlackMessage(String restaurantName, String lunchChoiceText) {
 		List<SlackMessageAction> actions = new ArrayList<>();
 		actions.add(builder()
-			.name("lunch")
+			.name(LUNCH)
 			.text("점심 선택")
 			.type("button")
-			.value(restaurant.getId().toString())
+			.value(restaurantName)
 			.build());
 
 		SlackMessageActionConfirm confirm = SlackMessageActionConfirm.builder()
@@ -109,7 +113,7 @@ public class LunchService {
 			.build();
 
 		actions.add(builder()
-			.name("lunch")
+			.name(LUNCH)
 			.text("다시 선택")
 			.type("button")
 			.style("danger")
@@ -118,20 +122,38 @@ public class LunchService {
 			.build());
 
 		SlackMessageAttachment attachment = SlackMessageAttachment.builder()
-			.text(LocalDate.now() + " 오늘의 점심은 *" + restaurantName + "* 어떠세요?")
+			.text(lunchChoiceText)
 			.color("#3AA3E3")
-			.callbackId("lunch")
+			.callbackId(LUNCH)
 			.actions(actions)
 			.build();
 
-		SlackMessage message = SlackMessage.builder()
+		return SlackMessage.builder()
 			.text("점심 선택의 시간입니다.")
 			.username(USERNAME)
 			.emoji(":rice_ball:")
 			.attachments(List.of(attachment))
 			.build();
-
-		slackNotificationService.sendMessage(message);
 	}
 
+	private String getRestaurantName() {
+		List<Restaurants> restaurants = restaurantsRepository.findAll();
+		Random r = new Random();
+		Restaurants restaurant = restaurants.stream().skip(r.nextInt(restaurants.size())).findFirst().get();
+		return restaurant.getName();
+	}
+
+	public void decision(SlackRequestPayload payload) {
+		String userName = payload.getUser().getName();
+		String value = payload.getActions().get(0).getValue();
+		String restaurantName = getRestaurantName();
+		String lunchChoiceText = "오늘의 점심은 *" + restaurantName + "* 어떠세요?";
+
+		if ("resend".equals(value)) {
+			lunchChoiceText = "오늘의 점심은 " + userName +"님이 선택한 *" + restaurantName + "* 입니다.";
+		}
+
+		SlackMessage message = getSlackMessage(restaurantName, lunchChoiceText);
+		slackNotificationService.sendMessage(message);
+	}
 }

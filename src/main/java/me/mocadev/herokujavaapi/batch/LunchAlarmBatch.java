@@ -27,8 +27,7 @@ public class LunchAlarmBatch {
 		lunchService.sendLunchAlarm();
 	}
 
-//	@Scheduled(cron = "0 30 12 * * 1-5")
-	@Scheduled(cron = "0 * * * * *")
+	@Scheduled(cron = "0 30 12 * * 1-5")
 	public void lunchRecommendAlarm() {
 		lunchService.recommendsOfToday();
 	}
