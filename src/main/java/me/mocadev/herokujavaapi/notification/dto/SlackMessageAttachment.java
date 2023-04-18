@@ -1,5 +1,6 @@
 package me.mocadev.herokujavaapi.notification.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -22,14 +23,22 @@ public class SlackMessageAttachment {
 	private final String title;
 	private final String text;
 	private final List<SlackMessageFields> fields;
+	@JsonProperty("attachment_type")
+	private final String attachmentType;
+	private final List<SlackMessageAction> actions;
+	@JsonProperty("callback_id")
+	private final String callbackId;
 
 	@Builder
-	public SlackMessageAttachment(String fallback, String color, String pretext, String title, String text, List<SlackMessageFields> fields) {
+	public SlackMessageAttachment(String fallback, String color, String pretext, String title, String text, List<SlackMessageFields> fields, List<SlackMessageAction> actions, String callbackId) {
 		this.fallback = fallback;
 		this.color = color;
 		this.pretext = pretext;
 		this.title = title;
 		this.text = text;
 		this.fields = fields;
+		this.actions = actions;
+		this.callbackId = callbackId;
+		this.attachmentType = "default";
 	}
 }

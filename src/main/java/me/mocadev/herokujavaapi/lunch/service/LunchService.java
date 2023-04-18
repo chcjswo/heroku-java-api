@@ -5,6 +5,7 @@ import me.mocadev.herokujavaapi.lunch.domain.Restaurants;
 import me.mocadev.herokujavaapi.lunch.dto.response.LunchCommandListResponse;
 import me.mocadev.herokujavaapi.lunch.repository.RestaurantsRepository;
 import me.mocadev.herokujavaapi.notification.dto.SlackMessage;
+import me.mocadev.herokujavaapi.notification.dto.SlackMessageAction;
 import me.mocadev.herokujavaapi.notification.dto.SlackMessageAttachment;
 import me.mocadev.herokujavaapi.notification.dto.SlackMessageFields;
 import me.mocadev.herokujavaapi.notification.service.SlackNotificationService;
@@ -17,6 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
+
+import static me.mocadev.herokujavaapi.notification.dto.SlackMessageAction.SlackMessageActionConfirm;
+import static me.mocadev.herokujavaapi.notification.dto.SlackMessageAction.builder;
 
 /**
  * @author chcjswo
@@ -74,6 +78,7 @@ public class LunchService {
 			.build();
 
 		SlackMessage slackMessage = SlackMessage.builder()
+			.text("점심시간 입니다.")
 			.emoji(":gookbab:")
 			.username(USERNAME)
 			.attachments(List.of(attachment))
@@ -86,10 +91,37 @@ public class LunchService {
 		List<Restaurants> restaurants = restaurantsRepository.findAll();
 		Random r = new Random();
 		Restaurants restaurant = restaurants.stream().skip(r.nextInt(restaurants.size())).findFirst().get();
+		String restaurantName = restaurant.getName();
+
+		List<SlackMessageAction> actions = new ArrayList<>();
+		actions.add(builder()
+			.name("lunch")
+			.text("점심 선택")
+			.type("button")
+			.value(restaurant.getId().toString())
+			.build());
+
+		SlackMessageActionConfirm confirm = SlackMessageActionConfirm.builder()
+			.title("점심 다시 선택??")
+			.text(restaurantName + " 말고 다시 선택 하시겠습니까?")
+			.okText("다시 선택")
+			.dismissText("그냥 먹을래")
+			.build();
+
+		actions.add(builder()
+			.name("lunch")
+			.text("다시 선택")
+			.type("button")
+			.style("danger")
+			.value("resend")
+			.confirm(confirm)
+			.build());
 
 		SlackMessageAttachment attachment = SlackMessageAttachment.builder()
-			.text(LocalDate.now() + " 오늘의 점심은 *" + restaurant.getName() + "* 어떠세요?")
+			.text(LocalDate.now() + " 오늘의 점심은 *" + restaurantName + "* 어떠세요?")
 			.color("#3AA3E3")
+			.callbackId("lunch")
+			.actions(actions)
 			.build();
 
 		SlackMessage message = SlackMessage.builder()
