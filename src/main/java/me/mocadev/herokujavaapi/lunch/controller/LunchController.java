@@ -1,6 +1,7 @@
 package me.mocadev.herokujavaapi.lunch.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import me.mocadev.herokujavaapi.lunch.dto.SlackRequestPayload;
 import me.mocadev.herokujavaapi.lunch.service.LunchService;
 import me.mocadev.herokujavaapi.notification.dto.SlackMessage;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
  * @github https://github.com/chcjswo
  * @since 2023-04-16
  **/
+@Slf4j
 @RequestMapping("/api/v1/lunch")
 @RequiredArgsConstructor
 @RestController
@@ -43,6 +45,7 @@ public class LunchController {
 
 	@PostMapping("/restaurants/decision")
 	public void decision(@RequestBody SlackRequestPayload dto) {
+		log.info("dto >>> {}", dto);
 		lunchService.decision(dto);
 	}
 }
