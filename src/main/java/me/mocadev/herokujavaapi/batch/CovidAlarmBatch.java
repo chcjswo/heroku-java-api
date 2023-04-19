@@ -38,16 +38,12 @@ public class CovidAlarmBatch {
 	private final SlackNotificationService slackNotificationService;
 
 	@Scheduled(cron = "0 0 10 * * 1-5")
-	public void covidAlarm() {
+	public void covidAlarm() throws IOException {
 		final String crawlingUrl = "https://ncov.kdca.go.kr/";
 		Connection conn = Jsoup.connect(crawlingUrl);
 
-		try {
-			Result result = getResult(conn);
-			sendSlack(result.date, result.fields);
-		} catch (IOException e) {
-			log.error("에러 발생: ", e);
-		}
+		Result result = getResult(conn);
+		sendSlack(result.date, result.fields);
 	}
 
 	private Result getResult(Connection conn) throws IOException {
@@ -62,16 +58,24 @@ public class CovidAlarmBatch {
 		var weeklySerious = document.select("#content > div > div > div > div.liveToggleOuter > div > div.live_left > div.occurrenceStatus > div.occur_graph > table > tbody > tr:nth-child(2) > td:nth-child(3) > span");
 		var weeklyAdmission = document.select("#content > div > div > div > div.liveToggleOuter > div > div.live_left > div.occurrenceStatus > div.occur_graph > table > tbody > tr:nth-child(2) > td:nth-child(4) > span");
 		var weeklyConfirmed = document.select("#content > div > div > div > div.liveToggleOuter > div > div.live_left > div.occurrenceStatus > div.occur_graph > table > tbody > tr:nth-child(2) > td:nth-child(5) > span");
+		var totalDeath = document.select("#content > div > div > div > div.liveToggleOuter > div > div.live_left > div.occurrenceStatus > div.occur_num > div:nth-child(1)");
+		var totalConfirmed = document.select("#content > div > div > div > div.liveToggleOuter > div > div.live_left > div.occurrenceStatus > div.occur_num > div:nth-child(2)");
+
+		String s = totalDeath.get(0).text().split("사망")[1];
+		String s1 = totalConfirmed.get(0).text().split("확진")[1];
+		String s2 = s1.split("다운로드")[0];
 
 		List<SlackMessageFields> fields = new ArrayList<>();
-		fields.add(slackNotificationService.makeField("일일 사망", dailyDeath.get(0).text() + " 명"));
-		fields.add(slackNotificationService.makeField("일일 재원 위중증", dailySerious.get(0).text() + " 명"));
-		fields.add(slackNotificationService.makeField("일일 신규 입원", dailyAdmission.get(0).text() + " 명"));
-		fields.add(slackNotificationService.makeField("일일 확진", dailyConfirmed.get(0).text() + " 명"));
-		fields.add(slackNotificationService.makeField("최근 7일간 일평균 사망", weeklyDeath.get(0).text() + " 명"));
-		fields.add(slackNotificationService.makeField("최근 7일간 일평균 재원 위중증", weeklySerious.get(0).text() + " 명"));
-		fields.add(slackNotificationService.makeField("최근 7일간 일평균 신규 입원", weeklyAdmission.get(0).text() + " 명"));
-		fields.add(slackNotificationService.makeField("최근 7일간 일평균 확진", weeklyConfirmed.get(0).text() + " 명"));
+		fields.add(slackNotificationService.makeField("일일 사망", dailyDeath.get(0).text() + "명"));
+		fields.add(slackNotificationService.makeField("일일 재원 위중증", dailySerious.get(0).text() + "명"));
+		fields.add(slackNotificationService.makeField("일일 신규 입원", dailyAdmission.get(0).text() + "명"));
+		fields.add(slackNotificationService.makeField("일일 확진", dailyConfirmed.get(0).text() + "명"));
+		fields.add(slackNotificationService.makeField("최근 7일간 일평균 사망", weeklyDeath.get(0).text() + "명"));
+		fields.add(slackNotificationService.makeField("최근 7일간 일평균 재원 위중증", weeklySerious.get(0).text() + "명"));
+		fields.add(slackNotificationService.makeField("최근 7일간 일평균 신규 입원", weeklyAdmission.get(0).text() + "명"));
+		fields.add(slackNotificationService.makeField("최근 7일간 일평균 확진", weeklyConfirmed.get(0).text() + "명"));
+		fields.add(slackNotificationService.makeField("(누적) 사망", s + "명"));
+		fields.add(slackNotificationService.makeField("(누적) 확진", s2 + "명"));
 		return new Result(date, fields);
 	}
 
