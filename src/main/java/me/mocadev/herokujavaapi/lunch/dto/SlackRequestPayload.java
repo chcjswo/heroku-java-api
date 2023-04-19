@@ -19,7 +19,7 @@ public class SlackRequestPayload {
 
 	@Data
 	public static class User {
-		private String name;
+		private String username;
 	}
 
 	@Data

@@ -155,16 +155,14 @@ public class LunchService {
 
 	public void decision(SlackRequestPayload payload) {
 		log.info("payload >>> {}", payload);
-		String userName = payload.getUser().getName();
+		String username = payload.getUser().getUsername();
 		String value = payload.getActions().get(0).getValue();
 		String restaurantName = getRestaurantName();
 		String lunchChoiceText = "오늘의 점심은 *" + restaurantName + "* 어떠세요?";
 
 		if ("resend".equals(value)) {
-			lunchChoiceText = "오늘의 점심은 " + userName +"님이 선택한 *" + restaurantName + "* 입니다.";
+			lunchChoiceText = "오늘의 점심은 " + username +"님이 선택한 *" + restaurantName + "* 입니다.";
 		}
-
-		SlackMessage message = getSlackMessage(restaurantName, lunchChoiceText);
-		slackNotificationService.sendMessage(message);
+		slackNotificationService.sendMessage(getSlackMessage(restaurantName, lunchChoiceText));
 	}
 }
