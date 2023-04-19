@@ -1,6 +1,7 @@
 package me.mocadev.herokujavaapi.lunch.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import me.mocadev.herokujavaapi.lunch.domain.Restaurants;
 import me.mocadev.herokujavaapi.lunch.dto.SlackRequestPayload;
 import me.mocadev.herokujavaapi.lunch.dto.response.LunchCommandListResponse;
@@ -14,6 +15,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +32,7 @@ import static me.mocadev.herokujavaapi.notification.dto.SlackMessageAction.Slack
  * @github https://github.com/chcjswo
  * @since 2023-04-17
  **/
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class LunchService {
@@ -137,14 +141,22 @@ public class LunchService {
 
 	private String getRestaurantName() {
 		List<Restaurants> restaurants = restaurantsRepository.findAll();
-		Random r = new Random();
-		Restaurants restaurant = restaurants.stream().skip(r.nextInt(restaurants.size())).findFirst().get();
-		return restaurant.getName();
+		return getRestaurant(restaurants).getName();
+	}
+
+	private static Restaurants getRestaurant(List<Restaurants> restaurants) {
+		try {
+			Random rand = SecureRandom.getInstanceStrong();
+			return restaurants.stream().skip(rand.nextInt(restaurants.size())).findFirst().orElseThrow();
+		} catch (NoSuchAlgorithmException e) {
+			throw new IllegalArgumentException(e);
+		}
 	}
 
 	public void decision(SlackRequestPayload payload) {
-		String userName = payload.getPayload().getUser().getName();
-		String value = payload.getPayload().getActions().get(0).getValue();
+		log.info("payload >>> {}", payload);
+		String userName = payload.getUser().getName();
+		String value = payload.getActions().get(0).getValue();
 		String restaurantName = getRestaurantName();
 		String lunchChoiceText = "오늘의 점심은 *" + restaurantName + "* 어떠세요?";
 
