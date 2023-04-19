@@ -15,6 +15,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -139,9 +141,16 @@ public class LunchService {
 
 	private String getRestaurantName() {
 		List<Restaurants> restaurants = restaurantsRepository.findAll();
-		Random r = new Random();
-		Restaurants restaurant = restaurants.stream().skip(r.nextInt(restaurants.size())).findFirst().get();
-		return restaurant.getName();
+		return getRestaurant(restaurants).getName();
+	}
+
+	private static Restaurants getRestaurant(List<Restaurants> restaurants) {
+		try {
+			Random rand = SecureRandom.getInstanceStrong();
+			return restaurants.stream().skip(rand.nextInt(restaurants.size())).findFirst().orElseThrow();
+		} catch (NoSuchAlgorithmException e) {
+			throw new IllegalArgumentException(e);
+		}
 	}
 
 	public void decision(SlackRequestPayload payload) {
