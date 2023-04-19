@@ -1,6 +1,7 @@
 package me.mocadev.herokujavaapi.lunch.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import me.mocadev.herokujavaapi.lunch.domain.Restaurants;
 import me.mocadev.herokujavaapi.lunch.dto.SlackRequestPayload;
 import me.mocadev.herokujavaapi.lunch.dto.response.LunchCommandListResponse;
@@ -29,6 +30,7 @@ import static me.mocadev.herokujavaapi.notification.dto.SlackMessageAction.Slack
  * @github https://github.com/chcjswo
  * @since 2023-04-17
  **/
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class LunchService {
@@ -143,8 +145,9 @@ public class LunchService {
 	}
 
 	public void decision(SlackRequestPayload payload) {
-		String userName = payload.getPayload().getUser().getName();
-		String value = payload.getPayload().getActions().get(0).getValue();
+		log.info("payload >>> {}", payload);
+		String userName = payload.getUser().getName();
+		String value = payload.getActions().get(0).getValue();
 		String restaurantName = getRestaurantName();
 		String lunchChoiceText = "오늘의 점심은 *" + restaurantName + "* 어떠세요?";
 
