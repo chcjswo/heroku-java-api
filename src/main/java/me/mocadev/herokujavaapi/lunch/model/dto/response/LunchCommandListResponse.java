@@ -1,4 +1,4 @@
-package me.mocadev.herokujavaapi.lunch.dto.response;
+package me.mocadev.herokujavaapi.lunch.model.dto.response;
 
 import lombok.Builder;
 import lombok.Data;

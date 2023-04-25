@@ -1,15 +1,20 @@
 package me.mocadev.herokujavaapi.lunch.repository;
 
-import me.mocadev.herokujavaapi.lunch.model.document.Restaurants;
+import me.mocadev.herokujavaapi.lunch.model.document.Lunches;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
+
+import java.time.LocalDate;
+import java.util.Optional;
 
 /**
  * @author chcjswo
  * @version 1.0.0
  * @blog https://mocadev.tistory.com
  * @github https://github.com/chcjswo
- * @since 2023-04-17
+ * @since 2023-04-25
  **/
-public interface RestaurantsRepository extends MongoRepository<Restaurants, ObjectId> {
+public interface LunchesRepository extends MongoRepository<Lunches, ObjectId> {
+
+	Optional<Lunches> findByLunchDate(LocalDate now);
 }
