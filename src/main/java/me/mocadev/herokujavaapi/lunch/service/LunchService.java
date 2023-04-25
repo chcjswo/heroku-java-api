@@ -2,9 +2,11 @@ package me.mocadev.herokujavaapi.lunch.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import me.mocadev.herokujavaapi.lunch.domain.Restaurants;
-import me.mocadev.herokujavaapi.lunch.dto.SlackRequestPayload;
-import me.mocadev.herokujavaapi.lunch.dto.response.LunchCommandListResponse;
+import me.mocadev.herokujavaapi.lunch.model.document.Lunches;
+import me.mocadev.herokujavaapi.lunch.model.document.Restaurants;
+import me.mocadev.herokujavaapi.lunch.model.dto.SlackRequestPayload;
+import me.mocadev.herokujavaapi.lunch.model.dto.response.LunchCommandListResponse;
+import me.mocadev.herokujavaapi.lunch.repository.LunchesRepository;
 import me.mocadev.herokujavaapi.lunch.repository.RestaurantsRepository;
 import me.mocadev.herokujavaapi.notification.dto.SlackMessage;
 import me.mocadev.herokujavaapi.notification.dto.SlackMessageAction;
@@ -39,6 +41,7 @@ public class LunchService {
 
 	public static final String LUNCH = "lunch";
 	private final RestaurantsRepository restaurantsRepository;
+	private final LunchesRepository lunchesRepository;
 	private final ModelMapper modelMapper;
 	private final SlackNotificationService slackNotificationService;
 
@@ -73,6 +76,9 @@ public class LunchService {
 	}
 
 	public void sendLunchAlarm() {
+		Lunches lunches = lunchesRepository.findByLunchDate(LocalDate.now())
+			.orElseThrow(() -> new IllegalArgumentException("점심 알람이 없습니다."));
+
 		List<SlackMessageFields> fields = new ArrayList<>();
 		fields.add(slackNotificationService.makeField("점심시간을 알려드립니다.",
 			"1시 점심시간 입니다. 그만 일하고 점심 드세요!"));
@@ -83,7 +89,7 @@ public class LunchService {
 			.build();
 
 		SlackMessage slackMessage = SlackMessage.builder()
-			.text("점심시간 입니다.")
+			.text("오늘의 점심은 *" + lunches.getRestaurantName() + "* 입니다.")
 			.emoji(":gookbab:")
 			.username(USERNAME)
 			.attachments(List.of(attachment))
@@ -92,11 +98,19 @@ public class LunchService {
 		slackNotificationService.sendMessage(slackMessage);
 	}
 
+	@Transactional
 	public void recommendsOfToday() {
 		String restaurantName = getRestaurantName();
+		saveLunch(restaurantName);
 		String lunchChoiceText = LocalDate.now() + " 오늘의 점심은 *" + restaurantName + "* 어떠세요?";
 		SlackMessage message = getSlackMessage(restaurantName, lunchChoiceText);
 		slackNotificationService.sendMessage(message);
+	}
+
+	private void saveLunch(String restaurantName) {
+		lunchesRepository.save(Lunches.builder()
+				.restaurantName(restaurantName)
+			.build());
 	}
 
 	private SlackMessage getSlackMessage(String restaurantName, String lunchChoiceText) {
@@ -144,7 +158,7 @@ public class LunchService {
 		return getRestaurant(restaurants).getName();
 	}
 
-	private static Restaurants getRestaurant(List<Restaurants> restaurants) {
+	private Restaurants getRestaurant(List<Restaurants> restaurants) {
 		try {
 			Random rand = SecureRandom.getInstanceStrong();
 			return restaurants.stream().skip(rand.nextInt(restaurants.size())).findFirst().orElseThrow();

@@ -1,7 +1,7 @@
-package me.mocadev.herokujavaapi.lunch.dto.request;
+package me.mocadev.herokujavaapi.lunch.model.dto.request;
 
 import lombok.Data;
-import me.mocadev.herokujavaapi.lunch.domain.Restaurants;
+import me.mocadev.herokujavaapi.lunch.model.document.Restaurants;
 
 /**
  * @author chcjswo
