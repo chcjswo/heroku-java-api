@@ -90,7 +90,7 @@ public class LunchService {
 
 		SlackMessage slackMessage = SlackMessage.builder()
 			.text("오늘의 점심은 *" + lunches.getRestaurantName() + "* 입니다.")
-			.emoji(":gookbab:")
+			.emoji(":rice:")
 			.username(USERNAME)
 			.attachments(List.of(attachment))
 			.build();
@@ -146,7 +146,7 @@ public class LunchService {
 			.build();
 
 		return SlackMessage.builder()
-			.text("점심 선택의 시간입니다.")
+			.text(LocalDate.now() + " 점심은 " + restaurantName + " 입니다.")
 			.username(USERNAME)
 			.emoji(":rice_ball:")
 			.attachments(List.of(attachment))
