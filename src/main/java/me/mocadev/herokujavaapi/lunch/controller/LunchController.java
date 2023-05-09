@@ -45,7 +45,8 @@ public class LunchController {
 
 	@PostMapping("/restaurants/decision")
 	public void decision(@RequestBody SlackRequestPayload dto) {
+		log.info("decision >>>>>>>>>>>>>>>>>>>>>>>>>> ");
 		log.info("dto >>> {}", dto);
-		lunchService.decision(dto);
+//		lunchService.decision(dto);
 	}
 }
