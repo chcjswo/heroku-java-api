@@ -169,8 +169,8 @@ public class LunchService {
 
 	public void decision(SlackRequestPayload payload) {
 		log.info("payload >>> {}", payload);
-		String username = "초천재";
-		String value = payload.getPayload().getActions().get(0).getValue();
+		String username = payload.getUser().getUsername();
+		String value = payload.getActions().get(0).getValue();
 		String restaurantName = getRestaurantName();
 		String lunchChoiceText = "오늘의 점심은 *" + restaurantName + "* 어떠세요?";
 
