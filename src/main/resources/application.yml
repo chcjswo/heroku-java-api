@@ -1,5 +1,8 @@
 server:
     port: 9090
+    tomcat:
+        mbeanregistry:
+            enabled: true
 spring:
     data:
         mongodb:
@@ -10,13 +13,22 @@ logging:
     file:
         path: logs
 management:
+    info:
+        java:
+            enabled: true
+        os:
+            enabled: true
+        env:
+            enabled: true
+    endpoint:
+        shutdown:
+            enabled: true
+        health:
+            show-components: always
     endpoints:
-        jmx:
-            exposure:
-                exclude: "*"
         web:
             exposure:
-                include: health
+                include: "*"
             base-path: ${ACTUATOR_PATH}
         health:
             enabled: true
