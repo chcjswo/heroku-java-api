@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
  * @github https://github.com/chcjswo
  * @since 2023-04-15
  **/
+@ToString
 @Getter
 @NoArgsConstructor
 public class SlackMessage {

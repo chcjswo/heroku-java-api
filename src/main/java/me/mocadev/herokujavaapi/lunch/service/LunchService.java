@@ -12,6 +12,7 @@ import me.mocadev.herokujavaapi.notification.dto.SlackMessage;
 import me.mocadev.herokujavaapi.notification.dto.SlackMessageAction;
 import me.mocadev.herokujavaapi.notification.dto.SlackMessageAttachment;
 import me.mocadev.herokujavaapi.notification.dto.SlackMessageFields;
+import me.mocadev.herokujavaapi.notification.service.LunchSlackNotificationService;
 import me.mocadev.herokujavaapi.notification.service.SlackNotificationService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,7 @@ public class LunchService {
 	private final LunchesRepository lunchesRepository;
 	private final ModelMapper modelMapper;
 	private final SlackNotificationService slackNotificationService;
+	private final LunchSlackNotificationService lunchSlackNotificationService;
 
 	private static final String USERNAME = "점심 뭐 먹지??";
 	public static final String COLOR = "#2eb886";
@@ -104,12 +106,12 @@ public class LunchService {
 		saveLunch(restaurantName);
 		String lunchChoiceText = LocalDate.now() + " 오늘의 점심은 *" + restaurantName + "* 어떠세요?";
 		SlackMessage message = getSlackMessage(restaurantName, lunchChoiceText);
-		slackNotificationService.sendMessage(message);
+		lunchSlackNotificationService.sendMessage(message);
 	}
 
 	private void saveLunch(String restaurantName) {
 		lunchesRepository.save(Lunches.builder()
-				.restaurantName(restaurantName)
+			.restaurantName(restaurantName)
 			.build());
 	}
 
@@ -175,8 +177,8 @@ public class LunchService {
 		String lunchChoiceText = "오늘의 점심은 *" + restaurantName + "* 어떠세요?";
 
 		if ("resend".equals(value)) {
-			lunchChoiceText = "오늘의 점심은 " + username +"님이 선택한 *" + restaurantName + "* 입니다.";
+			lunchChoiceText = "오늘의 점심은 " + username + "님이 선택한 *" + restaurantName + "* 입니다.";
 		}
-		slackNotificationService.sendMessage(getSlackMessage(restaurantName, lunchChoiceText));
+		lunchSlackNotificationService.sendMessage(getSlackMessage(restaurantName, lunchChoiceText));
 	}
 }

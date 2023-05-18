@@ -3,6 +3,7 @@ package me.mocadev.herokujavaapi.notification.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 /**
  * @author chcjswo
@@ -11,6 +12,7 @@ import lombok.Getter;
  * @github https://github.com/chcjswo
  * @since 2023-04-18
  **/
+@ToString
 @Getter
 public class SlackMessageAction {
 
@@ -31,6 +33,7 @@ public class SlackMessageAction {
 		this.confirm = confirm;
 	}
 
+	@ToString
 	@Getter
 	public static class SlackMessageActionConfirm {
 

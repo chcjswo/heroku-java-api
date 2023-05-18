@@ -27,3 +27,4 @@ document:
     path: ${api.path}
 notification:
     slack-url: ${SLACK_URL}
+    lunch-slack-url: ${LUNCH_SLACK_URL}
