@@ -8,10 +8,7 @@ import me.mocadev.herokujavaapi.notification.dto.SlackMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author chcjswo
@@ -47,7 +44,7 @@ public class LunchController {
 	}
 
 	@PostMapping("/restaurants/decision")
-	public void decision(SlackRequestPayload dto) {
+	public void decision(@ModelAttribute SlackRequestPayload dto) {
 		log.info("decision >>>>>>>>>>>>>>>>>>>>>>>>>> ");
 		log.info("dto >>> {}", dto);
 		lunchService.decision(dto);
