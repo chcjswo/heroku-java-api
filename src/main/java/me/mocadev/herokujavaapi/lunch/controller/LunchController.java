@@ -43,7 +43,8 @@ public class LunchController {
 		lunchService.recommendsOfToday();
 	}
 
-	@PostMapping("/restaurants/decision")
+	@PostMapping(value = "/restaurants/decision", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {
+		MediaType.APPLICATION_JSON_VALUE})
 	public void decision(@RequestBody SlackRequestPayload dto) {
 		log.info("decision >>>>>>>>>>>>>>>>>>>>>>>>>> ");
 		log.info("dto >>> {}", dto);
