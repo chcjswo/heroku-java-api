@@ -10,6 +10,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
+import java.util.Set;
+
 /**
  * @author chcjswo
  * @version 1.0.0
@@ -44,10 +48,21 @@ public class LunchController {
 	}
 
 	@PostMapping("/restaurants/decision")
-	public void decision(@ModelAttribute SlackPayload dto) {
+	public void decision(@ModelAttribute SlackPayload dto, HttpServletRequest request) {
 		log.info("decision >>>>>>>>>>>>>>>>>>>>>>>>>> ");
 		log.info("dto >>> {}", dto);
 //		lunchService.decision(dto);
+
+		Set<String> keySet = request.getParameterMap().keySet();
+		for(String key: keySet) {
+			log.info("key: {}", request.getParameter(key));
+		}
+
+		Enumeration<String> names = request.getParameterNames();
+		while(names.hasMoreElements()) {
+			String key = names.nextElement();
+			log.info("key: {}", request.getParameter(key));
+		}
 	}
 
 	@Data
