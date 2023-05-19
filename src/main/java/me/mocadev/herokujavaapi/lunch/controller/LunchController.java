@@ -54,6 +54,8 @@ public class LunchController {
 		lunchService.decision(dto);
 
 		log.info("content-type >>> {}", request.getHeader("content-type"));
+		String payload = request.getHeader("payload");
+		log.info("payload >>> {}", payload);
 
 		Set<String> keySet = request.getParameterMap().keySet();
 		for(String key: keySet) {
