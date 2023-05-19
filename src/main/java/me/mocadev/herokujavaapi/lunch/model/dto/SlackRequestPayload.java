@@ -1,6 +1,8 @@
 package me.mocadev.herokujavaapi.lunch.model.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -12,6 +14,8 @@ import java.util.List;
  * @since 2023-04-19
  **/
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class SlackRequestPayload {
 
 	private User user;
