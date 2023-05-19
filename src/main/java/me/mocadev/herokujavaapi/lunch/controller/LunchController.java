@@ -1,5 +1,6 @@
 package me.mocadev.herokujavaapi.lunch.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -64,6 +65,15 @@ public class LunchController {
 
 		SlackRequestPayload map = modelMapper.map(payload, SlackRequestPayload.class);
 		log.info("map >>> {}", map);
+
+		SlackRequestPayload map2 = modelMapper.map(dto, SlackRequestPayload.class);
+		log.info("map2 >>> {}", map2);
+
+		SlackRequestPayload myObject = new ObjectMapper().convertValue(payload, SlackRequestPayload.class);
+		log.info("myObject >>> {}", myObject);
+
+		SlackRequestPayload myObject2 = new ObjectMapper().convertValue(dto, SlackRequestPayload.class);
+		log.info("myObject2 >>> {}", myObject2);
 	}
 
 	@Data
