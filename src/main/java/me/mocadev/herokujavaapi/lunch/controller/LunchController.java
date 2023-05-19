@@ -8,7 +8,10 @@ import me.mocadev.herokujavaapi.notification.dto.SlackMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -48,17 +51,15 @@ public class LunchController {
 	}
 
 	@PostMapping("/restaurants/decision")
-	public void decision(@RequestBody Map<String, String> dto, HttpServletRequest request) {
+	public void decision(Map<String, Object> dto, HttpServletRequest request) {
 		log.info("decision >>>>>>>>>>>>>>>>>>>>>>>>>> ");
 		log.info("dto >>> {}", dto);
 //		lunchService.decision(dto);
 
 		log.info("content-type >>> {}", request.getHeader("content-type"));
-		String payload = request.getHeader("payload");
+		String payload = request.getParameter("payload");
 		log.info("payload >>> {}", payload);
-
-		String s = dto.get("type");
-		log.info("user >>> {}", s);
+		log.info("dto >>> {}", dto);
 
 		Set<String> keySet = request.getParameterMap().keySet();
 		for(String key: keySet) {
