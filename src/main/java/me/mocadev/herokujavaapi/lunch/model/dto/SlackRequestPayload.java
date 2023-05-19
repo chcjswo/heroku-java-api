@@ -14,8 +14,8 @@ import java.util.List;
 @Data
 public class SlackRequestPayload {
 
-//	private User user;
-//	private List<Actions> actions;
+	private User user;
+	private List<Actions> actions;
 //	private Payload payload;
 	private String type;
 

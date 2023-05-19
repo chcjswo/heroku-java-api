@@ -3,8 +3,10 @@ package me.mocadev.herokujavaapi.lunch.controller;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import me.mocadev.herokujavaapi.lunch.model.dto.SlackRequestPayload;
 import me.mocadev.herokujavaapi.lunch.service.LunchService;
 import me.mocadev.herokujavaapi.notification.dto.SlackMessage;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @author chcjswo
@@ -31,6 +32,7 @@ import java.util.Set;
 public class LunchController {
 
 	private final LunchService lunchService;
+	private final ModelMapper modelMapper;
 
 	@PostMapping("/commands/restaurants")
 	public ResponseEntity<SlackMessage> findRestaurantsBySlashCommand() {
@@ -59,12 +61,9 @@ public class LunchController {
 		log.info("content-type >>> {}", request.getHeader("content-type"));
 		String payload = request.getParameter("payload");
 		log.info("payload >>> {}", payload);
-		log.info("dto >>> {}", dto);
 
-		Set<String> keySet = request.getParameterMap().keySet();
-		for(String key: keySet) {
-			log.info("key: {}", request.getParameter(key));
-		}
+		SlackRequestPayload map = modelMapper.map(payload, SlackRequestPayload.class);
+		log.info("map >>> {}", map);
 	}
 
 	@Data
