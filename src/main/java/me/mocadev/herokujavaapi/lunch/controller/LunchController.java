@@ -57,10 +57,8 @@ public class LunchController {
 		String payload = request.getHeader("payload");
 		log.info("payload >>> {}", payload);
 
-		String s = dto.get("user");
+		String s = dto.get("type");
 		log.info("user >>> {}", s);
-		String s1 = dto.get("actions");
-		log.info("actions >>> {}", s1);
 
 		Set<String> keySet = request.getParameterMap().keySet();
 		for(String key: keySet) {
