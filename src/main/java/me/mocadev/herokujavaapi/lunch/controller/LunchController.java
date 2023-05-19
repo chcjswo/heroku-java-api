@@ -1,8 +1,8 @@
 package me.mocadev.herokujavaapi.lunch.controller;
 
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import me.mocadev.herokujavaapi.lunch.model.dto.SlackRequestPayload;
 import me.mocadev.herokujavaapi.lunch.service.LunchService;
 import me.mocadev.herokujavaapi.notification.dto.SlackMessage;
 import org.springframework.http.HttpStatus;
@@ -44,9 +44,16 @@ public class LunchController {
 	}
 
 	@PostMapping("/restaurants/decision")
-	public void decision(@RequestBody SlackRequestPayload dto) {
+	public void decision(@ModelAttribute SlackPayload dto) {
 		log.info("decision >>>>>>>>>>>>>>>>>>>>>>>>>> ");
 		log.info("dto >>> {}", dto);
-		lunchService.decision(dto);
+//		lunchService.decision(dto);
+	}
+
+	@Data
+	public static class SlackPayload {
+		private String action_id;
+		private String block_id;
+		private String value;
 	}
 }
