@@ -65,6 +65,9 @@ public class LunchController {
 
 		SlackRequestPayload myObject = new ObjectMapper().convertValue(payload, SlackRequestPayload.class);
 		log.info("myObject >>> {}", myObject);
+
+		Map<String, Object> map = modelMapper.map(payload, Map.class);
+		log.info("map >>> {}", map);
 	}
 
 	@Data
