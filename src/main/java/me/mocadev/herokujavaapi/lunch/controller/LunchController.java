@@ -3,6 +3,7 @@ package me.mocadev.herokujavaapi.lunch.controller;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import me.mocadev.herokujavaapi.lunch.model.dto.SlackRequestPayload;
 import me.mocadev.herokujavaapi.lunch.service.LunchService;
 import me.mocadev.herokujavaapi.notification.dto.SlackMessage;
 import org.springframework.http.HttpStatus;
@@ -11,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Enumeration;
 import java.util.Set;
 
 /**
@@ -48,19 +48,15 @@ public class LunchController {
 	}
 
 	@PostMapping("/restaurants/decision")
-	public void decision(@ModelAttribute SlackPayload dto, HttpServletRequest request) {
+	public void decision(@ModelAttribute SlackRequestPayload dto, HttpServletRequest request) {
 		log.info("decision >>>>>>>>>>>>>>>>>>>>>>>>>> ");
 		log.info("dto >>> {}", dto);
-//		lunchService.decision(dto);
+		lunchService.decision(dto);
+
+		log.info("content-type >>> {}", request.getHeader("content-type"));
 
 		Set<String> keySet = request.getParameterMap().keySet();
 		for(String key: keySet) {
-			log.info("key: {}", request.getParameter(key));
-		}
-
-		Enumeration<String> names = request.getParameterNames();
-		while(names.hasMoreElements()) {
-			String key = names.nextElement();
 			log.info("key: {}", request.getParameter(key));
 		}
 	}

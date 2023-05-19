@@ -16,7 +16,8 @@ public class SlackRequestPayload {
 
 //	private User user;
 //	private List<Actions> actions;
-	private Payload payload;
+//	private Payload payload;
+	private String type;
 
 	@Data
 	public static class Payload {
