@@ -30,14 +30,12 @@ public class SlackRequestPayload {
 		private String block_id;
 		private Text text;
 		private String value;
-		private String type;
 		private String action_ts;
 	}
 
 	@Data
 	public static class Text {
 		private String type;
-		private String text;
 		private boolean emoji;
 	}
 
