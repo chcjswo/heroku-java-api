@@ -183,9 +183,7 @@ public class LunchService {
 		JsonObject jsonUser = element.getAsJsonObject().get("user").getAsJsonObject();
 		SlackRequestPayload.User user = gson.fromJson(jsonUser, SlackRequestPayload.User.class);
 		log.info("element >>>> {}", element);
-		log.info("user >>>> {}", user);
 		String username = user.getName();
-		log.info("username >>>> {}", username);
 
 		JsonArray jsonActions = element.getAsJsonObject().get("actions").getAsJsonArray();
 		List<SlackRequestPayload.Actions> actions = gson.fromJson(jsonActions.toString(),
@@ -196,7 +194,9 @@ public class LunchService {
 		String lunchChoiceText = "오늘의 점심은 *" + restaurantName + "* 어떠세요?";
 
 		if (!RESEND.equals(value)) {
-			lunchChoiceText = "오늘의 점심은 " + username + "님이 선택한 *" + restaurantName + "* 입니다.";
+			Lunches lunches = lunchesRepository.findByLunchDate(LocalDate.now())
+				.orElseThrow(() -> new IllegalArgumentException("점심 알람이 없습니다."));
+			lunchChoiceText = "오늘의 점심은 " + username + "님이 선택한 *" + lunches.getRestaurantName() + "* 입니다.";
 		}
 		lunchSlackNotificationService.sendMessage(getSlackMessage(restaurantName, lunchChoiceText));
 	}
