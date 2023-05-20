@@ -61,16 +61,23 @@ public class LunchController {
 //		lunchService.decision(dto);
 
 		log.info("content-type >>> {}", request.getHeader("content-type"));
-		String payload = request.getParameter("payload");
+		String payload = request.getParameter("payload").replaceAll("\n", "").replaceAll("\r", "");
 		log.info("payload >>> {}", payload);
 		log.info("dto >>> {}", dto);
 
-		ObjectMapper mapper = new ObjectMapper();
-		SlackRequestPayload payload2 = mapper.readValue(payload , SlackRequestPayload.class);
-		log.info("myObject >>> {}", payload2);
+		ObjectMapper objectMapper = new ObjectMapper();
+		String json = objectMapper.writeValueAsString(payload);
+		log.info("json >>> {}", json);
 
-		SlackRequestPayload myObject = new ObjectMapper().convertValue(payload, SlackRequestPayload.class);
-		log.info("myObject >>> {}", myObject);
+		SlackRequestPayload slackRequestPayload = objectMapper.readValue(json, SlackRequestPayload.class);
+		log.info("slackRequestPayload >>> {}", slackRequestPayload);
+
+//		ObjectMapper mapper = new ObjectMapper();
+//		SlackRequestPayload payload2 = mapper.readValue(payload , SlackRequestPayload.class);
+//		log.info("myObject >>> {}", payload2);
+//
+//		SlackRequestPayload myObject = new ObjectMapper().convertValue(payload, SlackRequestPayload.class);
+//		log.info("myObject >>> {}", myObject);
 	}
 
 	@Data
