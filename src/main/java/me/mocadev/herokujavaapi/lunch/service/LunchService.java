@@ -192,7 +192,7 @@ public class LunchService {
 		String restaurantName = getRestaurantName();
 		String lunchChoiceText = "오늘의 점심은 *" + restaurantName + "* 어떠세요?";
 
-		if (RESEND.equals(value)) {
+		if (!RESEND.equals(value)) {
 			lunchChoiceText = "오늘의 점심은 " + username + "님이 선택한 *" + restaurantName + "* 입니다.";
 		}
 		lunchSlackNotificationService.sendMessage(getSlackMessage(restaurantName, lunchChoiceText));
