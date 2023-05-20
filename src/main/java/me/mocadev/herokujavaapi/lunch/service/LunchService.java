@@ -1,5 +1,6 @@
 package me.mocadev.herokujavaapi.lunch.service;
 
+import com.google.gson.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.mocadev.herokujavaapi.lunch.model.document.Lunches;
@@ -15,9 +16,11 @@ import me.mocadev.herokujavaapi.notification.dto.SlackMessageFields;
 import me.mocadev.herokujavaapi.notification.service.LunchSlackNotificationService;
 import me.mocadev.herokujavaapi.notification.service.SlackNotificationService;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.time.LocalDate;
@@ -41,6 +44,7 @@ import static me.mocadev.herokujavaapi.notification.dto.SlackMessageAction.Slack
 public class LunchService {
 
 	public static final String LUNCH = "lunch";
+	private static final String RESEND = "resend";
 	private final RestaurantsRepository restaurantsRepository;
 	private final LunchesRepository lunchesRepository;
 	private final ModelMapper modelMapper;
@@ -136,7 +140,7 @@ public class LunchService {
 			.text("다시 선택")
 			.type("button")
 			.style("danger")
-			.value("resend")
+			.value(RESEND)
 			.confirm(confirm)
 			.build());
 
@@ -169,16 +173,28 @@ public class LunchService {
 		}
 	}
 
-	public void decision(SlackRequestPayload payload) {
-		log.info("payload >>> {}", payload);
-//		String username = payload.getPayload().getUser().getUsername();
-//		String value = payload.getPayload().getActions().get(0).getValue();
-//		String restaurantName = getRestaurantName();
-//		String lunchChoiceText = "오늘의 점심은 *" + restaurantName + "* 어떠세요?";
-//
-//		if ("resend".equals(value)) {
-//			lunchChoiceText = "오늘의 점심은 " + username + "님이 선택한 *" + restaurantName + "* 입니다.";
-//		}
-//		lunchSlackNotificationService.sendMessage(getSlackMessage(restaurantName, lunchChoiceText));
+	public void decision(HttpServletRequest request) {
+		String payload = request.getParameter("payload");
+
+		Gson gson = new Gson();
+		JsonParser parser = new JsonParser();
+		JsonElement element = parser.parse(payload);
+
+		JsonObject jsonUser = element.getAsJsonObject().get("user").getAsJsonObject();
+		SlackRequestPayload.User user = gson.fromJson(jsonUser, SlackRequestPayload.User.class);
+		String username = user.getUsername();
+
+		JsonArray jsonActions = element.getAsJsonObject().get("actions").getAsJsonArray();
+		List<SlackRequestPayload.Actions> actions = gson.fromJson(jsonActions.toString(),
+			new TypeToken<List<SlackRequestPayload.Actions>>(){}.getType());
+		String value = actions.get(0).getValue();
+
+		String restaurantName = getRestaurantName();
+		String lunchChoiceText = "오늘의 점심은 *" + restaurantName + "* 어떠세요?";
+
+		if (RESEND.equals(value)) {
+			lunchChoiceText = "오늘의 점심은 " + username + "님이 선택한 *" + restaurantName + "* 입니다.";
+		}
+		lunchSlackNotificationService.sendMessage(getSlackMessage(restaurantName, lunchChoiceText));
 	}
 }

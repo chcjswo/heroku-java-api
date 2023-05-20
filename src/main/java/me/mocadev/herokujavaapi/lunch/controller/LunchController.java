@@ -1,11 +1,7 @@
 package me.mocadev.herokujavaapi.lunch.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import me.mocadev.herokujavaapi.lunch.model.dto.SlackRequestPayload;
 import me.mocadev.herokujavaapi.lunch.service.LunchService;
 import me.mocadev.herokujavaapi.notification.dto.SlackMessage;
 import org.modelmapper.ModelMapper;
@@ -18,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
 
 /**
  * @author chcjswo
@@ -55,35 +50,7 @@ public class LunchController {
 	}
 
 	@PostMapping("/restaurants/decision")
-	public void decision(Map<String, Object> dto, HttpServletRequest request) throws JsonProcessingException {
-		log.info("decision >>>>>>>>>>>>>>>>>>>>>>>>>> ");
-		log.info("dto >>> {}", dto);
-//		lunchService.decision(dto);
-
-		log.info("content-type >>> {}", request.getHeader("content-type"));
-		String payload = request.getParameter("payload").replaceAll("\n", "").replaceAll("\r", "");
-		log.info("payload >>> {}", payload);
-		log.info("dto >>> {}", dto);
-
-		ObjectMapper objectMapper = new ObjectMapper();
-		String json = objectMapper.writeValueAsString(payload);
-		log.info("json >>> {}", json);
-
-		SlackRequestPayload slackRequestPayload = objectMapper.readValue(json, SlackRequestPayload.class);
-		log.info("slackRequestPayload >>> {}", slackRequestPayload);
-
-//		ObjectMapper mapper = new ObjectMapper();
-//		SlackRequestPayload payload2 = mapper.readValue(payload , SlackRequestPayload.class);
-//		log.info("myObject >>> {}", payload2);
-//
-//		SlackRequestPayload myObject = new ObjectMapper().convertValue(payload, SlackRequestPayload.class);
-//		log.info("myObject >>> {}", myObject);
-	}
-
-	@Data
-	public static class SlackPayload {
-		private String action_id;
-		private String block_id;
-		private String value;
+	public void decision(HttpServletRequest request) {
+		lunchService.decision(request);
 	}
 }
