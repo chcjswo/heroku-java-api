@@ -182,7 +182,10 @@ public class LunchService {
 
 		JsonObject jsonUser = element.getAsJsonObject().get("user").getAsJsonObject();
 		SlackRequestPayload.User user = gson.fromJson(jsonUser, SlackRequestPayload.User.class);
+		log.info("element >>>> {}", element);
+		log.info("user >>>> {}", user);
 		String username = user.getUsername();
+		log.info("username >>>> {}", username);
 
 		JsonArray jsonActions = element.getAsJsonObject().get("actions").getAsJsonArray();
 		List<SlackRequestPayload.Actions> actions = gson.fromJson(jsonActions.toString(),
