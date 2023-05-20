@@ -1,9 +1,11 @@
 package me.mocadev.herokujavaapi.lunch.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import me.mocadev.herokujavaapi.lunch.model.dto.SlackRequestPayload;
 import me.mocadev.herokujavaapi.lunch.service.LunchService;
 import me.mocadev.herokujavaapi.notification.dto.SlackMessage;
 import org.modelmapper.ModelMapper;
@@ -53,7 +55,7 @@ public class LunchController {
 	}
 
 	@PostMapping("/restaurants/decision")
-	public void decision(Map<String, Object> dto, HttpServletRequest request) {
+	public void decision(Map<String, Object> dto, HttpServletRequest request) throws JsonProcessingException {
 		log.info("decision >>>>>>>>>>>>>>>>>>>>>>>>>> ");
 		log.info("dto >>> {}", dto);
 //		lunchService.decision(dto);
@@ -61,12 +63,14 @@ public class LunchController {
 		log.info("content-type >>> {}", request.getHeader("content-type"));
 		String payload = request.getParameter("payload");
 		log.info("payload >>> {}", payload);
+		log.info("dto >>> {}", dto);
 
-		Map myObject = new ObjectMapper().convertValue(payload, Map.class);
+		ObjectMapper mapper = new ObjectMapper();
+		SlackRequestPayload payload2 = mapper.readValue(payload , SlackRequestPayload.class);
+		log.info("myObject >>> {}", payload2);
+
+		SlackRequestPayload myObject = new ObjectMapper().convertValue(payload, SlackRequestPayload.class);
 		log.info("myObject >>> {}", myObject);
-
-		Map map = modelMapper.map(payload, Map.class);
-		log.info("map >>> {}", map);
 	}
 
 	@Data
