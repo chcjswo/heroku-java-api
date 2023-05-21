@@ -43,8 +43,9 @@ import static me.mocadev.herokujavaapi.notification.dto.SlackMessageAction.Slack
 @Service
 public class LunchService {
 
-	public static final String LUNCH = "lunch";
+	private static final String LUNCH = "lunch";
 	private static final String RESEND = "resend";
+	private static final String USERNAME_SYSTEM = "system";
 	private final RestaurantsRepository restaurantsRepository;
 	private final LunchesRepository lunchesRepository;
 	private final ModelMapper modelMapper;
@@ -52,7 +53,7 @@ public class LunchService {
 	private final LunchSlackNotificationService lunchSlackNotificationService;
 
 	private static final String USERNAME = "점심 뭐 먹지??";
-	public static final String COLOR = "#2eb886";
+	private static final String COLOR = "#2eb886";
 
 	@Transactional(readOnly = true)
 	public SlackMessage findAll() {
@@ -107,15 +108,16 @@ public class LunchService {
 	@Transactional
 	public void recommendsOfToday() {
 		String restaurantName = getRestaurantName();
-		saveLunch(restaurantName);
+		saveLunch(restaurantName, USERNAME_SYSTEM);
 		String lunchChoiceText = LocalDate.now() + " 오늘의 점심은 *" + restaurantName + "* 어떠세요?";
 		SlackMessage message = getSlackMessage(restaurantName, lunchChoiceText);
 		lunchSlackNotificationService.sendMessage(message);
 	}
 
-	private void saveLunch(String restaurantName) {
+	private void saveLunch(String restaurantName, String username) {
 		lunchesRepository.save(Lunches.builder()
 			.restaurantName(restaurantName)
+			.username(username)
 			.build());
 	}
 
@@ -174,30 +176,49 @@ public class LunchService {
 	}
 
 	public void decision(HttpServletRequest request) {
-		String payload = request.getParameter("payload");
-
+		JsonElement element = getElement(request);
 		Gson gson = new Gson();
-		JsonParser parser = new JsonParser();
-		JsonElement element = parser.parse(payload);
 
-		JsonObject jsonUser = element.getAsJsonObject().get("user").getAsJsonObject();
-		SlackRequestPayload.User user = gson.fromJson(jsonUser, SlackRequestPayload.User.class);
-		log.info("element >>>> {}", element);
-		String username = user.getName();
+		lunchesRepository.deleteLunchesByLunchDate(LocalDate.now());
 
-		JsonArray jsonActions = element.getAsJsonObject().get("actions").getAsJsonArray();
-		List<SlackRequestPayload.Actions> actions = gson.fromJson(jsonActions.toString(),
-			new TypeToken<List<SlackRequestPayload.Actions>>(){}.getType());
-		String value = actions.get(0).getValue();
-
-		String restaurantName = getRestaurantName();
-		String lunchChoiceText = "오늘의 점심은 *" + restaurantName + "* 어떠세요?";
+		String username;
+		String value = getActionValue(element, gson);
+		String restaurantName;
+		String lunchChoiceText;
 
 		if (!RESEND.equals(value)) {
+			username = getUsername(element, gson);
 			Lunches lunches = lunchesRepository.findByLunchDate(LocalDate.now())
 				.orElseThrow(() -> new IllegalArgumentException("점심 알람이 없습니다."));
-			lunchChoiceText = "오늘의 점심은 " + username + "님이 선택한 *" + lunches.getRestaurantName() + "* 입니다.";
+			restaurantName = lunches.getRestaurantName();
+			lunchChoiceText = "오늘의 점심은 " + username + "님이 선택한 *" + restaurantName + "* 입니다.";
+		} else {
+			username = USERNAME_SYSTEM;
+			restaurantName = getRestaurantName();
+			lunchChoiceText = "오늘의 점심은 *" + restaurantName + "* 어떠세요?";
 		}
+
+		saveLunch(restaurantName, username);
 		lunchSlackNotificationService.sendMessage(getSlackMessage(restaurantName, lunchChoiceText));
+	}
+
+	private static String getActionValue(JsonElement element, Gson gson) {
+		JsonArray jsonActions = element.getAsJsonObject().get("actions").getAsJsonArray();
+		List<SlackRequestPayload.Actions> actions = gson.fromJson(jsonActions.toString(),
+			new TypeToken<List<SlackRequestPayload.Actions>>() {
+			}.getType());
+		return actions.get(0).getValue();
+	}
+
+	private static String getUsername(JsonElement element, Gson gson) {
+		JsonObject jsonUser = element.getAsJsonObject().get("user").getAsJsonObject();
+		SlackRequestPayload.User user = gson.fromJson(jsonUser, SlackRequestPayload.User.class);
+		return user.getName();
+	}
+
+	private JsonElement getElement(HttpServletRequest request) {
+		String payload = request.getParameter("payload");
+		JsonParser parser = new JsonParser();
+		return parser.parse(payload);
 	}
 }

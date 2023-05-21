@@ -17,4 +17,5 @@ import java.util.Optional;
 public interface LunchesRepository extends MongoRepository<Lunches, ObjectId> {
 
 	Optional<Lunches> findByLunchDate(LocalDate now);
+	void deleteLunchesByLunchDate(LocalDate now);
 }
