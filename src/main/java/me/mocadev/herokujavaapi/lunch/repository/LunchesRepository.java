@@ -4,7 +4,6 @@ import me.mocadev.herokujavaapi.lunch.model.document.Lunches;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 /**
@@ -16,6 +15,6 @@ import java.util.Optional;
  **/
 public interface LunchesRepository extends MongoRepository<Lunches, ObjectId> {
 
-	Optional<Lunches> findByLunchDate(LocalDate now);
-	void deleteLunchesByLunchDate(LocalDate now);
+	Optional<Lunches> findByLunchDate(String now);
+	void deleteLunchesByLunchDate(String now);
 }

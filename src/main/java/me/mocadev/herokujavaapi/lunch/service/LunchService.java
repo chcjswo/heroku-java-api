@@ -85,7 +85,7 @@ public class LunchService {
 
 	@Transactional(readOnly = true)
 	public void sendLunchAlarm() {
-		Lunches lunches = lunchesRepository.findByLunchDate(LocalDate.now())
+		Lunches lunches = lunchesRepository.findByLunchDate(LocalDate.now().toString())
 			.orElseThrow(() -> new IllegalArgumentException("점심 알람이 없습니다."));
 
 		List<SlackMessageFields> fields = new ArrayList<>();
@@ -189,7 +189,7 @@ public class LunchService {
 
 		if (!RESEND.equals(value)) {
 			username = getUsername(element, gson);
-			Lunches lunches = lunchesRepository.findByLunchDate(LocalDate.now())
+			Lunches lunches = lunchesRepository.findByLunchDate(LocalDate.now().toString())
 				.orElseThrow(() -> new IllegalArgumentException("점심 알람이 없습니다."));
 			restaurantName = lunches.getRestaurantName();
 			lunchChoiceText = "오늘의 점심은 " + username + "님이 선택한 *" + restaurantName + "* 입니다.";
@@ -199,7 +199,7 @@ public class LunchService {
 			lunchChoiceText = "오늘의 점심은 *" + restaurantName + "* 어떠세요?";
 		}
 
-		lunchesRepository.deleteLunchesByLunchDate(LocalDate.now());
+		lunchesRepository.deleteLunchesByLunchDate(LocalDate.now().toString());
 		saveLunch(restaurantName, username);
 		lunchSlackNotificationService.sendMessage(getSlackMessage(restaurantName, lunchChoiceText));
 	}

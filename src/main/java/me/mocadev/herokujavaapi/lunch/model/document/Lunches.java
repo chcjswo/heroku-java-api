@@ -27,7 +27,7 @@ public class Lunches {
 	private ObjectId id;
 
 	@Field("lunch_date")
-	private LocalDate lunchDate;
+	private String lunchDate;
 
 	@Field("restaurant_name")
 	private String restaurantName;
@@ -37,7 +37,7 @@ public class Lunches {
 
 	@Builder
 	public Lunches(String restaurantName, String username) {
-		this.lunchDate = LocalDate.now();
+		this.lunchDate = LocalDate.now().toString();
 		this.restaurantName = restaurantName;
 		this.username = username;
 	}
