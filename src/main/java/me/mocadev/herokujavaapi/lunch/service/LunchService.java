@@ -112,7 +112,7 @@ public class LunchService {
 		String restaurantName = getRestaurantName();
 		saveLunch(restaurantName, USERNAME_SYSTEM);
 		String lunchChoiceText = LocalDate.now() + " 오늘의 점심은 *" + restaurantName + "* 어떠세요?";
-		SlackMessage message = getSlackMessage(restaurantName, lunchChoiceText);
+		SlackMessage message = getSlackMessage(restaurantName, lunchChoiceText, true);
 		lunchSlackNotificationService.sendMessage(message);
 	}
 
@@ -123,7 +123,7 @@ public class LunchService {
 			.build());
 	}
 
-	private SlackMessage getSlackMessage(String restaurantName, String lunchChoiceText) {
+	private SlackMessage getSlackMessage(String restaurantName, String lunchChoiceText, boolean actionFlag) {
 		List<SlackMessageAction> actions = new ArrayList<>();
 		actions.add(SlackMessageAction.builder()
 			.name(LUNCH)
@@ -132,27 +132,29 @@ public class LunchService {
 			.value(restaurantName)
 			.build());
 
-		SlackMessageActionConfirm confirm = SlackMessageActionConfirm.builder()
-			.title("점심 다시 선택??")
-			.text(restaurantName + " 말고 다시 선택 하시겠습니까?")
-			.okText("다시 선택")
-			.dismissText("그냥 먹을래")
-			.build();
+		if (actionFlag) {
+			SlackMessageActionConfirm confirm = SlackMessageActionConfirm.builder()
+				.title("점심 다시 선택??")
+				.text(restaurantName + " 말고 다시 선택 하시겠습니까?")
+				.okText("다시 선택")
+				.dismissText("그냥 먹을래")
+				.build();
 
-		actions.add(SlackMessageAction.builder()
-			.name(LUNCH)
-			.text("다시 선택")
-			.type("button")
-			.style("danger")
-			.value(RESEND)
-			.confirm(confirm)
-			.build());
+			actions.add(SlackMessageAction.builder()
+				.name(LUNCH)
+				.text("다시 선택")
+				.type("button")
+				.style("danger")
+				.value(RESEND)
+				.confirm(confirm)
+				.build());
+		}
 
 		SlackMessageAttachment attachment = SlackMessageAttachment.builder()
 			.text(lunchChoiceText)
 			.color("#3AA3E3")
 			.callbackId(LUNCH)
-			.actions(actions)
+			.actions(actionFlag ? actions : null)
 			.build();
 
 		return SlackMessage.builder()
@@ -186,6 +188,7 @@ public class LunchService {
 		String value = getActionValue(element, gson);
 		String restaurantName;
 		String lunchChoiceText;
+		boolean actionFlag;
 
 		if (!RESEND.equals(value)) {
 			username = getUsername(element, gson);
@@ -193,15 +196,17 @@ public class LunchService {
 				.orElseThrow(() -> new IllegalArgumentException("점심 알람이 없습니다."));
 			restaurantName = lunches.getRestaurantName();
 			lunchChoiceText = "오늘의 점심은 " + username + "님이 선택한 *" + restaurantName + "* 입니다.";
+			actionFlag = false;
 		} else {
 			username = USERNAME_SYSTEM;
 			restaurantName = getRestaurantName();
 			lunchChoiceText = "오늘의 점심은 *" + restaurantName + "* 어떠세요?";
+			actionFlag = true;
 		}
 
 		lunchesRepository.deleteLunchesByLunchDate(LocalDate.now().toString());
 		saveLunch(restaurantName, username);
-		lunchSlackNotificationService.sendMessage(getSlackMessage(restaurantName, lunchChoiceText));
+		lunchSlackNotificationService.sendMessage(getSlackMessage(restaurantName, lunchChoiceText, actionFlag));
 	}
 
 	private static String getActionValue(JsonElement element, Gson gson) {
