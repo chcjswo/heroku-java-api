@@ -78,10 +78,12 @@ public class LunchService {
 			.build();
 	}
 
+	@Transactional
 	public void saveRestaurant(String name) {
 		restaurantsRepository.save(Restaurants.builder().name(name).build());
 	}
 
+	@Transactional(readOnly = true)
 	public void sendLunchAlarm() {
 		Lunches lunches = lunchesRepository.findByLunchDate(LocalDate.now())
 			.orElseThrow(() -> new IllegalArgumentException("점심 알람이 없습니다."));
@@ -175,11 +177,10 @@ public class LunchService {
 		}
 	}
 
+	@Transactional
 	public void decision(HttpServletRequest request) {
 		JsonElement element = getElement(request);
 		Gson gson = new Gson();
-
-		lunchesRepository.deleteLunchesByLunchDate(LocalDate.now());
 
 		String username;
 		String value = getActionValue(element, gson);
@@ -198,6 +199,7 @@ public class LunchService {
 			lunchChoiceText = "오늘의 점심은 *" + restaurantName + "* 어떠세요?";
 		}
 
+		lunchesRepository.deleteLunchesByLunchDate(LocalDate.now());
 		saveLunch(restaurantName, username);
 		lunchSlackNotificationService.sendMessage(getSlackMessage(restaurantName, lunchChoiceText));
 	}
