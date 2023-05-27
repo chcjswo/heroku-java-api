@@ -52,7 +52,7 @@ public class LunchController {
 		lunchService.decision(request);
 	}
 
-	@PostMapping(value = "/commands/remove", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
+	@PostMapping(value = "/commands/restaurants/remove", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
 	public ResponseEntity<String> remove(@RequestParam String restaurantName) {
 		return ResponseEntity.ok().body(lunchService.remove(restaurantName));
 	}
