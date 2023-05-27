@@ -37,9 +37,9 @@ public class LunchController {
 
 	@PostMapping(value = "/commands/restaurants/new",
 		consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
-	public ResponseEntity<String> saveRestaurant(@RequestParam String restaurantName) {
-		lunchService.saveRestaurant(restaurantName);
-		return ResponseEntity.status(HttpStatus.CREATED).body(restaurantName + " 식당을 추가했습니다.");
+	public ResponseEntity<String> saveRestaurant(@RequestParam String text) {
+		lunchService.saveRestaurant(text);
+		return ResponseEntity.status(HttpStatus.CREATED).body(text + " 식당을 추가했습니다.");
 	}
 
 	@PostMapping("/restaurants/recommends")
@@ -52,8 +52,8 @@ public class LunchController {
 		lunchService.decision(request);
 	}
 
-	@PostMapping(value = "/commands/restaurants/remove", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
-	public ResponseEntity<String> remove(@RequestParam String restaurantName) {
-		return ResponseEntity.ok().body(lunchService.remove(restaurantName));
+	@PostMapping("/commands/restaurants/remove")
+	public ResponseEntity<String> remove(@RequestParam String text) {
+		return ResponseEntity.ok().body(lunchService.remove(text));
 	}
 }
