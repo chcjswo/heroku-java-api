@@ -35,7 +35,7 @@ public class LunchController {
 		return ResponseEntity.ok().body(result);
 	}
 
-	@PostMapping(path = "/commands/restaurants/new",
+	@PostMapping(value = "/commands/restaurants/new",
 		consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
 	public ResponseEntity<String> saveRestaurant(@RequestParam String restaurantName) {
 		lunchService.saveRestaurant(restaurantName);
@@ -52,7 +52,7 @@ public class LunchController {
 		lunchService.decision(request);
 	}
 
-	@PostMapping("/commands/remove")
+	@PostMapping(value = "/commands/remove", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
 	public ResponseEntity<String> remove(@RequestParam String restaurantName) {
 		return ResponseEntity.ok().body(lunchService.remove(restaurantName));
 	}
