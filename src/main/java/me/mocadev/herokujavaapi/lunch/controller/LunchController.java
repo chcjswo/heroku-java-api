@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.mocadev.herokujavaapi.lunch.service.LunchService;
 import me.mocadev.herokujavaapi.notification.dto.SlackMessage;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +28,6 @@ import javax.servlet.http.HttpServletRequest;
 public class LunchController {
 
 	private final LunchService lunchService;
-	private final ModelMapper modelMapper;
 
 	@PostMapping("/commands/restaurants")
 	public ResponseEntity<SlackMessage> findRestaurantsBySlashCommand() {
@@ -39,9 +37,9 @@ public class LunchController {
 
 	@PostMapping(path = "/commands/restaurants/new",
 		consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
-	public ResponseEntity<String> saveRestaurant(@RequestParam String text) {
-		lunchService.saveRestaurant(text);
-		return ResponseEntity.status(HttpStatus.CREATED).body(text + " 식당을 추가했습니다.");
+	public ResponseEntity<String> saveRestaurant(@RequestParam String restaurantName) {
+		lunchService.saveRestaurant(restaurantName);
+		return ResponseEntity.status(HttpStatus.CREATED).body(restaurantName + " 식당을 추가했습니다.");
 	}
 
 	@PostMapping("/restaurants/recommends")
@@ -52,5 +50,10 @@ public class LunchController {
 	@PostMapping("/restaurants/decision")
 	public void decision(HttpServletRequest request) {
 		lunchService.decision(request);
+	}
+
+	@PostMapping("/commands/remove")
+	public ResponseEntity<String> remove(@RequestParam String restaurantName) {
+		return ResponseEntity.ok().body(lunchService.remove(restaurantName));
 	}
 }

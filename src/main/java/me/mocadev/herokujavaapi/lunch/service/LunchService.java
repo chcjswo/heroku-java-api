@@ -26,6 +26,7 @@ import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -227,5 +228,15 @@ public class LunchService {
 		String payload = request.getParameter("payload");
 		JsonParser parser = new JsonParser();
 		return parser.parse(payload);
+	}
+
+	@Transactional
+	public String remove(String restaurantName) {
+		Optional<Restaurants> restaurants = restaurantsRepository.findByName(restaurantName);
+		if (restaurants.isPresent()) {
+			restaurantsRepository.delete(restaurants.get());
+			return restaurantName + " 식당을 삭제했습니다.";
+		}
+		return restaurantName + " 식당은 점심 식당 리스트에 없습니다.";
 	}
 }
