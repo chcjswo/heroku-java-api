@@ -185,29 +185,41 @@ public class LunchService {
 		JsonElement element = getElement(request);
 		Gson gson = new Gson();
 
-		String username;
 		String value = getActionValue(element, gson);
+		String username;
 		String restaurantName;
 		String lunchChoiceText;
 		boolean actionFlag;
+		Lunches lunches = lunchesRepository.findByLunchDate(LocalDate.now().toString())
+			.orElseThrow(() -> new IllegalArgumentException("점심 알람이 없습니다."));
 
-		if (!RESEND.equals(value)) {
+		if (RESEND.equals(value)) {
+			if (lunches.getUsername().equals(USERNAME_SYSTEM)) {
+				username = USERNAME_SYSTEM;
+				restaurantName = getRestaurantName();
+				lunchChoiceText = "오늘의 점심은 *" + restaurantName + "* 어떠세요?";
+				actionFlag = true;
+				removeTodayLunchAndSave(username, restaurantName);
+			} else {
+				username = lunches.getUsername();
+				restaurantName = lunches.getRestaurantName();
+				lunchChoiceText = "오늘의 점심은 이미 " + username + "님이 *" + restaurantName + "*을 선택하셨습니다.";
+				actionFlag = false;
+			}
+		} else {
 			username = getUsername(element, gson);
-			Lunches lunches = lunchesRepository.findByLunchDate(LocalDate.now().toString())
-				.orElseThrow(() -> new IllegalArgumentException("점심 알람이 없습니다."));
 			restaurantName = lunches.getRestaurantName();
 			lunchChoiceText = "오늘의 점심은 " + username + "님이 선택한 *" + restaurantName + "* 입니다.";
 			actionFlag = false;
-		} else {
-			username = USERNAME_SYSTEM;
-			restaurantName = getRestaurantName();
-			lunchChoiceText = "오늘의 점심은 *" + restaurantName + "* 어떠세요?";
-			actionFlag = true;
+			removeTodayLunchAndSave(username, restaurantName);
 		}
 
+		lunchSlackNotificationService.sendMessage(getSlackMessage(restaurantName, lunchChoiceText, actionFlag));
+	}
+
+	private void removeTodayLunchAndSave(String username, String restaurantName) {
 		lunchesRepository.deleteLunchesByLunchDate(LocalDate.now().toString());
 		saveLunch(restaurantName, username);
-		lunchSlackNotificationService.sendMessage(getSlackMessage(restaurantName, lunchChoiceText, actionFlag));
 	}
 
 	private static String getActionValue(JsonElement element, Gson gson) {
@@ -239,4 +251,8 @@ public class LunchService {
 		}
 		return restaurantName + " 식당은 점심 식당 리스트에 없습니다.";
 	}
+
+	@Transactional
+    public void force(String text) {
+    }
 }

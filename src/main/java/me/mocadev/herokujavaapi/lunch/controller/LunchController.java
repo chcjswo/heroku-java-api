@@ -56,4 +56,10 @@ public class LunchController {
 	public ResponseEntity<String> remove(@RequestParam String text) {
 		return ResponseEntity.ok().body(lunchService.remove(text));
 	}
+
+	@PostMapping("/commands/restaurants/force")
+	public ResponseEntity<String> force(@RequestParam String text) {
+		lunchService.force(text);
+		return ResponseEntity.ok().body(text + " 식당을 추가했습니다.");
+	}
 }
