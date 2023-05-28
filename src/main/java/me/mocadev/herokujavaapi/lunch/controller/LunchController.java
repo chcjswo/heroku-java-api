@@ -58,8 +58,8 @@ public class LunchController {
 	}
 
 	@PostMapping("/commands/restaurants/force")
-	public ResponseEntity<String> force(@RequestParam String text) {
-		lunchService.force(text);
-		return ResponseEntity.ok().body(text + " 식당을 추가했습니다.");
+	public ResponseEntity<Void> force(@RequestParam String text) {
+		lunchService.forceChoice(text);
+		return ResponseEntity.ok().build();
 	}
 }

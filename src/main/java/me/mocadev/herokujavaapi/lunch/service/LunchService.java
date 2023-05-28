@@ -47,6 +47,7 @@ public class LunchService {
 	private static final String LUNCH = "lunch";
 	private static final String RESEND = "resend";
 	private static final String USERNAME_SYSTEM = "system";
+	private static final String USERNAME_FORCE = "force";
 	private final RestaurantsRepository restaurantsRepository;
 	private final LunchesRepository lunchesRepository;
 	private final ModelMapper modelMapper;
@@ -65,8 +66,8 @@ public class LunchService {
 
 		List<SlackMessageFields> fields = new ArrayList<>();
 		list.forEach(item -> fields.add(SlackMessageFields.builder()
-			.title(item.getName())
-			.build()));
+											.title(item.getName())
+											.build()));
 
 		SlackMessageAttachment attachment = SlackMessageAttachment.builder()
 			.color("#F35A00")
@@ -91,7 +92,7 @@ public class LunchService {
 
 		List<SlackMessageFields> fields = new ArrayList<>();
 		fields.add(slackNotificationService.makeField("점심시간을 알려드립니다.",
-			"1시 점심시간 입니다. 그만 일하고 점심 드세요!"));
+													  "1시 점심시간 입니다. 그만 일하고 점심 드세요!"));
 
 		SlackMessageAttachment attachment = SlackMessageAttachment.builder()
 			.color(COLOR)
@@ -119,19 +120,19 @@ public class LunchService {
 
 	private void saveLunch(String restaurantName, String username) {
 		lunchesRepository.save(Lunches.builder()
-			.restaurantName(restaurantName)
-			.username(username)
-			.build());
+								   .restaurantName(restaurantName)
+								   .username(username)
+								   .build());
 	}
 
 	private SlackMessage getSlackMessage(String restaurantName, String lunchChoiceText, boolean actionFlag) {
 		List<SlackMessageAction> actions = new ArrayList<>();
 		actions.add(SlackMessageAction.builder()
-			.name(LUNCH)
-			.text("점심 선택")
-			.type("button")
-			.value(restaurantName)
-			.build());
+						.name(LUNCH)
+						.text("점심 선택")
+						.type("button")
+						.value(restaurantName)
+						.build());
 
 		if (actionFlag) {
 			SlackMessageActionConfirm confirm = SlackMessageActionConfirm.builder()
@@ -142,13 +143,13 @@ public class LunchService {
 				.build();
 
 			actions.add(SlackMessageAction.builder()
-				.name(LUNCH)
-				.text("다시 선택")
-				.type("button")
-				.style("danger")
-				.value(RESEND)
-				.confirm(confirm)
-				.build());
+							.name(LUNCH)
+							.text("다시 선택")
+							.type("button")
+							.style("danger")
+							.value(RESEND)
+							.confirm(confirm)
+							.build());
 		}
 
 		SlackMessageAttachment attachment = SlackMessageAttachment.builder()
@@ -203,7 +204,11 @@ public class LunchService {
 			} else {
 				username = lunches.getUsername();
 				restaurantName = lunches.getRestaurantName();
-				lunchChoiceText = "오늘의 점심은 이미 " + username + "님이 *" + restaurantName + "*을 선택하셨습니다.";
+				if (username.equals(USERNAME_FORCE)) {
+					lunchChoiceText = "오늘의 점심은 무조건 *" + restaurantName + "* 입니다.";
+				} else {
+					lunchChoiceText = "오늘의 점심은 이미 " + username + "님이 *" + restaurantName + "*을 선택하셨습니다.";
+				}
 				actionFlag = false;
 			}
 		} else {
@@ -225,8 +230,8 @@ public class LunchService {
 	private static String getActionValue(JsonElement element, Gson gson) {
 		JsonArray jsonActions = element.getAsJsonObject().get("actions").getAsJsonArray();
 		List<SlackRequestPayload.Actions> actions = gson.fromJson(jsonActions.toString(),
-			new TypeToken<List<SlackRequestPayload.Actions>>() {
-			}.getType());
+																  new TypeToken<List<SlackRequestPayload.Actions>>() {
+																  }.getType());
 		return actions.get(0).getValue();
 	}
 
@@ -253,6 +258,12 @@ public class LunchService {
 	}
 
 	@Transactional
-    public void force(String text) {
-    }
+	public void forceChoice(String restaurantName) {
+		Optional<Lunches> lunch = lunchesRepository.findByLunchDate(LocalDate.now().toString());
+		if (lunch.isPresent() && (lunch.get().getUsername().equals(USERNAME_SYSTEM))) {
+			String lunchChoiceText = "오늘의 점심은 무조건 *" + restaurantName + "* 입니다.";
+			removeTodayLunchAndSave(USERNAME_FORCE, restaurantName);
+			lunchSlackNotificationService.sendMessage(getSlackMessage(restaurantName, lunchChoiceText, false));
+		}
+	}
 }
