@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import me.mocadev.herokujavaapi.notification.dto.SlackChannel;
 import me.mocadev.herokujavaapi.notification.dto.SlackMessage;
@@ -34,11 +35,14 @@ public class CovidAlarmBatch {
 	private static final String USERNAME = "코로나 알람";
 	public static final String COLOR = "#CF2511";
 	public static final String EMOJI = ":covid-19-coronavirus:";
+	public static final String WEELKY_FORMAT = "%s 주간 양성자";
+	public static final String PERSON_FORMAT = "%s명";
 	private final SlackNotificationService slackNotificationService;
 
-	@Scheduled(cron = "0 0 10 * * 1-5")
+//	@Scheduled(cron = "0 0 10 * * 1-5")
+	@Scheduled(cron = "0 * * * * *")
 	public void covidAlarm() throws IOException {
-		final String crawlingUrl = "https://ncov.kdca.go.kr/";
+		final String crawlingUrl = "https://ncov.kdca.go.kr/bdBoardListR.do?brdId=1&brdGubun=11";
 		Connection conn = Jsoup.connect(crawlingUrl);
 
 		Result result = getResult(conn);
@@ -48,36 +52,31 @@ public class CovidAlarmBatch {
 	private Result getResult(Connection conn) throws IOException {
 		Document document = conn.get();
 
-		var date = document.select("#content > div > div > div > div.liveToggleOuter > div > div.live_left > div.occurrenceStatus > h2 > span");
-		var dailyDeath = document.select("#content > div > div > div > div.liveToggleOuter > div > div.live_left > div.occurrenceStatus > div.occur_graph > table > tbody > tr:nth-child(1) > td:nth-child(2) > span");
-		var dailySerious = document.select("#content > div > div > div > div.liveToggleOuter > div > div.live_left > div.occurrenceStatus > div.occur_graph > table > tbody > tr:nth-child(1) > td:nth-child(3) > span");
-		var dailyAdmission = document.select("#content > div > div > div > div.liveToggleOuter > div > div.live_left > div.occurrenceStatus > div.occur_graph > table > tbody > tr:nth-child(1) > td:nth-child(4) > span");
-		var dailyConfirmed = document.select("#content > div > div > div > div.liveToggleOuter > div > div.live_left > div.occurrenceStatus > div.occur_graph > table > tbody > tr:nth-child(1) > td:nth-child(5) > span");
-		var weeklyDeath = document.select("#content > div > div > div > div.liveToggleOuter > div > div.live_left > div.occurrenceStatus > div.occur_graph > table > tbody > tr > td:nth-child(2) > span");
-		var weeklySerious = document.select("#content > div > div > div > div.liveToggleOuter > div > div.live_left > div.occurrenceStatus > div.occur_graph > table > tbody > tr > td:nth-child(3) > span");
-		var weeklyAdmission = document.select("#content > div > div > div > div.liveToggleOuter > div > div.live_left > div.occurrenceStatus > div.occur_graph > table > tbody > tr > td:nth-child(4) > span");
-		var weeklyConfirmed = document.select("#content > div > div > div > div.liveToggleOuter > div > div.live_left > div.occurrenceStatus > div.occur_graph > table > tbody > tr > td:nth-child(4) > span");
-		var totalDeath = document.select("#content > div > div > div > div.liveToggleOuter > div > div.live_left > div.occurrenceStatus > div.occur_num > div:nth-child(1)");
-		var totalConfirmed = document.select("#content > div > div > div > div.liveToggleOuter > div > div.live_left > div.occurrenceStatus > div.occur_num > div:nth-child(2)");
+		var date = document.select("#content > div > p.s_descript");
 
-		String s = totalDeath.get(0).text().split("사망")[1];
-		String s1 = totalConfirmed.get(0).text().split("확진")[1];
-		String s2 = s1.replace("다운로드", "");
+		var weekly1 = document.select("#content > div > div:nth-child(5) > table > thead > tr > th:nth-child(2)");
+		var weekly2 = document.select("#content > div > div:nth-child(5) > table > thead > tr > th:nth-child(3)");
+		var weekly3 = document.select("#content > div > div:nth-child(5) > table > thead > tr > th:nth-child(4)");
+		var weekly4 = document.select("#content > div > div:nth-child(5) > table > thead > tr > th:nth-child(5)");
+
+		var infected1 = document.select("#content > div > div:nth-child(5) > table > tbody > tr > td:nth-child(2)");
+		var infected2 = document.select("#content > div > div:nth-child(5) > table > tbody > tr > td:nth-child(3)");
+		var infected3 = document.select("#content > div > div:nth-child(5) > table > tbody > tr > td:nth-child(4)");
+		var infected4 = document.select("#content > div > div:nth-child(5) > table > tbody > tr > td:nth-child(5)");
 
 		List<SlackMessageFields> fields = new ArrayList<>();
-		fields.add(slackNotificationService.makeField("일일 사망", dailyDeath.get(0).text() + "명"));
-		fields.add(slackNotificationService.makeField("일일 재원 위중증", dailySerious.get(0).text() + "명"));
-		fields.add(slackNotificationService.makeField("일일 신규 입원", dailyAdmission.get(0).text() + "명"));
-//		fields.add(slackNotificationService.makeField("일일 확진", dailyConfirmed.get(0).text() + "명"));
-		fields.add(slackNotificationService.makeField("최근 7일간 일평균 사망", weeklyDeath.get(0).text() + "명"));
-		fields.add(slackNotificationService.makeField("최근 7일간 일평균 재원 위중증", weeklySerious.get(0).text() + "명"));
-//		fields.add(slackNotificationService.makeField("최근 7일간 일평균 신규 입원", weeklyAdmission.get(0).text() + "명"));
-		fields.add(slackNotificationService.makeField("최근 7일간 일평균 확진", weeklyConfirmed.get(0).text() + "명"));
-		fields.add(slackNotificationService.makeField("(누적) 사망", s + "명"));
-		fields.add(slackNotificationService.makeField("(누적) 확진", s2 + "명"));
+		fields.add(slackNotificationService.makeField(getFormat(WEELKY_FORMAT, weekly1), getFormat(PERSON_FORMAT, infected1)));
+		fields.add(slackNotificationService.makeField(getFormat(WEELKY_FORMAT, weekly2), getFormat(PERSON_FORMAT, infected2)));
+		fields.add(slackNotificationService.makeField(getFormat(WEELKY_FORMAT, weekly3), getFormat(PERSON_FORMAT, infected3)));
+		fields.add(slackNotificationService.makeField(getFormat(WEELKY_FORMAT, weekly4), getFormat(PERSON_FORMAT, infected4)));
 		return new Result(date, fields);
 	}
 
+	private static String getFormat(String stringFormat, Elements elements) {
+		return String.format(stringFormat, elements.get(0).text());
+	}
+
+	@ToString
 	private static class Result {
 		public final Elements date;
 		public final List<SlackMessageFields> fields;
