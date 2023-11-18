@@ -1,6 +1,20 @@
 package me.mocadev.herokujavaapi.lunch.service;
 
-import com.google.gson.*;
+import static me.mocadev.herokujavaapi.notification.dto.SlackMessageAction.SlackMessageActionConfirm;
+import javax.servlet.http.HttpServletRequest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
+import java.util.stream.Collectors;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.mocadev.herokujavaapi.lunch.model.document.Lunches;
@@ -19,18 +33,6 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.servlet.http.HttpServletRequest;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
-import java.util.stream.Collectors;
-
-import static me.mocadev.herokujavaapi.notification.dto.SlackMessageAction.SlackMessageActionConfirm;
 
 /**
  * @author chcjswo
@@ -100,7 +102,7 @@ public class LunchService {
 			.build();
 
 		SlackMessage slackMessage = SlackMessage.builder()
-			.text("오늘의 점심은 *" + lunches.getRestaurantName() + "* 입니다.")
+			.text("오늘의 점심은 " + lunches.getRestaurantName() + " 입니다.")
 			.emoji(":rice:")
 			.username(USERNAME)
 			.attachments(List.of(attachment))
