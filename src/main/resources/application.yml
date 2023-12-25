@@ -4,6 +4,8 @@ server:
         mbeanregistry:
             enabled: true
 spring:
+    config:
+        import: optional:file:.env[.properties]
     data:
         mongodb:
             uri: ${MONGO_URI}
