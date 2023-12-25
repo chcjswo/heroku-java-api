@@ -23,7 +23,7 @@ public class LunchAlarmBatch {
 	@Scheduled(cron = "0 0 13 * * 1-5")
 	public void lunchAlarm() throws InterruptedException {
 		int loopIndex = 0;
-		while (loopIndex-- < 3) {
+		while (loopIndex++ < 3) {
 			lunchService.sendLunchAlarm();
 			Thread.sleep(2000);
 		}
