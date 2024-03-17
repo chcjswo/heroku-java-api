@@ -2,7 +2,6 @@ package me.mocadev.herokujavaapi.batch;
 
 import lombok.RequiredArgsConstructor;
 import me.mocadev.herokujavaapi.common.service.WorkService;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 /**
@@ -20,13 +19,11 @@ public class WorkAlarmBatch {
 
 	private final WorkService workService;
 
-	@Scheduled(cron = "0 10 10 * * 1-5")
-	public void lunchAlarm() {
+	public void attendanceAlarm() {
 		workService.sendAttendance();
 	}
 
-	@Scheduled(cron = "0 10 19 * * 1-5")
-	public void lunchRecommendAlarm() {
+	public void leaveWorkAlarm() {
 		workService.sendLeaveWork();
 	}
 }
