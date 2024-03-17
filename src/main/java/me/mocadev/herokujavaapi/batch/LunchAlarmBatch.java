@@ -33,5 +33,4 @@ public class LunchAlarmBatch {
 	public void lunchRecommendAlarm() {
 		lunchService.recommendsOfToday();
 	}
-
 }

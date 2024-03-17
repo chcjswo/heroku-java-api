@@ -15,7 +15,6 @@ import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 /**
@@ -39,7 +38,6 @@ public class CovidAlarmBatch {
 	public static final String PERSON_FORMAT = "%s명";
 	private final SlackNotificationService slackNotificationService;
 
-	@Scheduled(cron = "0 0 10 * * 1-5")
 	public void covidAlarm() throws IOException {
 		final String crawlingUrl = "https://ncov.kdca.go.kr/bdBoardListR.do?brdId=1&brdGubun=11";
 		Connection conn = Jsoup.connect(crawlingUrl);
@@ -102,5 +100,4 @@ public class CovidAlarmBatch {
 
 		slackNotificationService.sendMessage(slackMessage);
 	}
-
 }
